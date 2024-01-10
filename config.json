@@ -1,0 +1,9 @@
+{
+    "port": 3334,
+    "database": {
+        "dialect": "sqlite",
+        "host": null,
+        "username": null,
+        "password": null
+    }
+}
