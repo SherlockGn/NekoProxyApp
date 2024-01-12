@@ -11,7 +11,7 @@ import Inspect from 'vite-plugin-inspect'
 const pathSrc = path.resolve(__dirname, 'src')
 
 export default defineConfig({
-  base: 'public',
+  base: 'nekoapp/public',
   resolve: {
     alias: {
       '@': pathSrc,

@@ -44,3 +44,5 @@ export const rpc = new Proxy({}, {
         })
     }
 })
+
+window.rpc = rpc

@@ -3,6 +3,7 @@ const express = require('express')
 const { static } = require('./static')
 const { router } = require('./router')
 const { rest } = require('./rest')
+const { githook } = require('./githook')
 const { monitor } = require('./monitor')
 const { logger } = require('./log')
 const config = require('../config.json')
@@ -12,12 +13,13 @@ const app = express()
 app.disable('x-powered-by')
 app.disable('etag')
 
-app.use('/public', static)
+app.use('/nekoapp/public', static)
 
 app.use('*', monitor)
 
 app.use(router)
 app.use(rest)
+app.use(githook)
 
 const servers = []
 

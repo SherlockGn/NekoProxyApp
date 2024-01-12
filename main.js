@@ -7,8 +7,6 @@ const main = async () => {
     await init()
     await start()
     await refreshProxies()
-
-    const { Op, DataTypes } = require('sequelize')
 }
 
 main()

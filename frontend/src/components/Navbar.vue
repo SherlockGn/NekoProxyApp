@@ -66,11 +66,25 @@
               <span>CICD</span>
             </template>
             <el-menu-item>
-              <el-icon><i-ep-setting /></el-icon>
-              <span>Configure</span>
+              <router-link to="/project">
+                <el-icon><i-ep-reading /></el-icon>
+                <span>Project</span>
+              </router-link>
+            </el-menu-item>
+            <el-menu-item>
+              <router-link to="/pm2">
+                <el-icon><i-ep-shopping-bag /></el-icon>
+                <span>PM2</span>
+              </router-link>
+            </el-menu-item>
+            <el-menu-item>
+              <router-link to="/projectlog">
+                <el-icon><i-ep-coin /></el-icon>
+                <span>Project Log</span>
+              </router-link>
             </el-menu-item>
           </el-sub-menu>
-          <el-sub-menu index="5">
+          <!-- <el-sub-menu index="5">
             <template #title>
               <el-icon><i-ep-phone /></el-icon>
               <span>Heartbeat test</span>
@@ -79,6 +93,6 @@
               <el-icon><i-ep-setting /></el-icon>
               <span>Configure</span>
             </el-menu-item>
-          </el-sub-menu>
+          </el-sub-menu> -->
         </el-menu>
 </template>

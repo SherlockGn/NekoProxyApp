@@ -8,6 +8,8 @@ const { Model } = require('../db/model')
 const { Property } = require('../db/property')
 const { Rest } = require('../db/rest')
 const { RestLog } = require('../db/restLog')
+const { Project } = require('../db/project')
+const { ProjectLog } = require('../db/projectLog')
 
 const init = async () => {
 

@@ -15,6 +15,11 @@ import ExploreData from "./components/ExploreData.vue"
 import ExploreApi from "./components/ExploreApi.vue"
 import RestLog from "./components/RestLog.vue"
 
+import Project from "./components/Project.vue"
+import NewProject from "./components/NewProject.vue"
+import ProjectLog from "./components/ProjectLog.vue"
+import PM2 from "./components/PM2.vue"
+
 const routes = [
     {
         path: '/',
@@ -84,7 +89,27 @@ const routes = [
         path: '/restlog',
         name: 'RestLog',
         component: RestLog
-    }
+    },
+    {
+        path: '/project',
+        name: 'Project',
+        component: Project
+    },
+    {
+        path: '/newproject',
+        name: 'NewProject',
+        component: NewProject
+    },
+    {
+        path: '/projectlog',
+        name: 'ProjectLog',
+        component: ProjectLog
+    },
+    {
+        path: '/pm2',
+        name: 'PM2',
+        component: PM2
+    },
 ]
 
 const router = createRouter({

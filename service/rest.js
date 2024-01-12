@@ -1,13 +1,11 @@
 const { Router, json } = require('express')
 
-const { port } = require('../config.json')
+const { port, enableCORS } = require('../config.json')
 const { Model } = require('../db/model')
 const { Rest } = require('../db/rest')
 const { queryData, createData, updateData, deleteData } = require('./datacenter')
 
 const router = Router()
-
-const enabledCors = true
 
 const checkPermission = async (req, res, type) => {
     const token = req.headers.authorization
@@ -52,7 +50,7 @@ router.all('/api/datacenter/:db/:model/:suffix?', async (req, res, next) => {
     await new Promise((resolve, reject) => {
         json()(req, res, resolve)
     })
-    if (enabledCors) {
+    if (enableCORS) {
         res.header('Access-Control-Allow-Origin', '*')
         res.header('Access-Control-Allow-Methods', '*')
         res.header('Access-Control-Allow-Headers', '*')

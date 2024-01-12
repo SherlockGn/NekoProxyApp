@@ -1,22 +1,20 @@
 const { Router, json } = require('express')
 
 const { invoke } = require('../rpc/rpc')
-const { port } = require('../config.json')
+const { port, enableCORS } = require('../config.json')
 
 const router = Router()
-
-const enabledCors = true
 
 router.get('/', function(req, res, next) {
     if (port !== req.socket.address().port) {
         next()
         return
     }
-    res.redirect("/public")
+    res.redirect("/nekoapp/public")
 })
 
 router.options('*', async (req, res, next) => {
-    if (enabledCors) {
+    if (enableCORS) {
         req.context.isApiPreflight = true
         res.header('Access-Control-Allow-Origin', '*')
         res.header('Access-Control-Allow-Methods', '*')
@@ -35,7 +33,7 @@ router.post('/api/rpc', async (req, res, next) => {
     await new Promise((resolve, reject) => {
         json()(req, res, resolve)
     })
-    if (enabledCors) {
+    if (enableCORS) {
         res.header('Access-Control-Allow-Origin', '*')
         res.header('Access-Control-Allow-Methods', '*')
         res.header('Access-Control-Allow-Headers', '*')
