@@ -10,6 +10,9 @@
             <el-form-item label="Repository">
                 <el-input v-model="project.repo" :disabled="!isCreate" />
             </el-form-item>
+            <el-form-item label="Branch">
+                <el-input v-model="project.branch" :disabled="!isCreate" />
+            </el-form-item>
             <el-form-item label="Type">
                 <el-select v-model="project.type" placeholder="Select" size="default" :disabled="!isCreate">
                     <el-option
@@ -60,7 +63,10 @@ onMounted(async () => {
     if (!isCreate.value) {
         const pro = await rpc.project.getById(id.value)
         project.value = {
-            ...pro
+            ...pro,
+            branch: pro.branch || '',
+            script: pro.script || '',
+            args: pro.args || ''
         }
     }
 })
@@ -69,6 +75,7 @@ const project = ref({
     name: '',
     description: '',
     repo: '',
+    branch: '',
     type: 'Static',
     script: '',
     port: 8080,
@@ -79,6 +86,7 @@ const createOrUpdate = async () => {
     isLoading.value = true
     const projToCreate = {
         ...project.value,
+        branch: project.value.branch === '' ? null : project.value.branch,
         script: project.value.type === 'Static' ? null : project.value.script,
         args: project.value.type === 'Static' ? null : project.value.args,
         port: project.value.type === 'NodeServer' ? null : project.value.port

@@ -28,7 +28,10 @@
       <el-descriptions-item label="Updated at">{{ displayTimestamp(element.updatedAt) }}</el-descriptions-item>
       <el-descriptions-item label="Repo" :span="3">{{ element.repo }}</el-descriptions-item>
       <el-descriptions-item label="Type">{{ element.type }}</el-descriptions-item>
-      <el-descriptions-item label="Branch">{{ element.branch }}</el-descriptions-item>
+      <el-descriptions-item label="Branch">
+        <el-tag v-if="element.branch===null" size="small" type="info">not specified</el-tag>
+        <el-text v-if="element.branch!==null">{{ element.branch }}</el-text>
+      </el-descriptions-item>
       <el-descriptions-item v-if="element.script!==null" label="Script">{{ element.script }}</el-descriptions-item>
       <el-descriptions-item v-if="element.port!==null" label="Port">{{ element.port }}</el-descriptions-item>
       <el-descriptions-item v-if="element.args!==null" label="Args" :span="3">{{ element.args }}</el-descriptions-item>

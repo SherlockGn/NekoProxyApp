@@ -78,14 +78,21 @@ const createProject = async proj => {
 
     const { projectPath } = getPath(proj)
 
-    if (proj.branch !== null) {
-        await doWithLog(async () => await checkout(projectPath, proj.branch),
-            proj.name, 'git checkout', 'init')
-    }
-
-    if (proj.type === 'NodeServer') {
-        await doWithLog(async () => await install(projectPath),
-            proj.name, 'npm install', 'init')
+    try {
+        if (proj.branch !== null) {
+            await doWithLog(async () => await checkout(projectPath, proj.branch),
+                proj.name, 'git checkout', 'init')
+        }
+    
+        if (proj.type === 'NodeServer') {
+            await doWithLog(async () => await install(projectPath),
+                proj.name, 'npm install', 'init')
+        }
+    } catch(error) {
+        if (fs.existsSync(projectPath)) {
+            fs.rmSync(projectPath, { recursive: true, force: true })
+        }
+        throw error
     }
 
     return await Project.create(proj)

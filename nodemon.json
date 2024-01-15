@@ -1,6 +1,7 @@
 {
     "ignore": [
         "frontend",
-        "runtime"
+        "runtime",
+        ".DS_Store"
     ]
 }

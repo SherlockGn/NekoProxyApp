@@ -40,8 +40,7 @@ const Project = connection.define('project', {
     },
     branch: {
         type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'master'
+        allowNull: true
     }
 })
 

@@ -34,7 +34,7 @@ const checkPermission = async (req, res, type) => {
             modelId: mod.id,
             token
         }
-    })).dataValues
+    }))?.dataValues
     if (!rest || !rest[type]) {
         res.sendStatus(403)
         return null

@@ -1,6 +1,6 @@
 const invoke = async (module, func, args) => {
-    const regexIsAllAlpha = /^[a-zA-Z]+$/
-    if (!regexIsAllAlpha.test(module) || !regexIsAllAlpha.test(func)) {
+    const reg = /^[a-zA-Z]+$/
+    if (!reg.test(module) || !reg.test(func)) {
         throw Error('Invalid module or function name')
     }
     const mo = require(`./${module}`)
