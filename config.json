@@ -6,5 +6,5 @@
         "username": null,
         "password": null
     },
-    "enableCORS": false
+    "enableCORS": true
 }

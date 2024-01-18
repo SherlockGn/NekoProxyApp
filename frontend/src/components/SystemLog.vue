@@ -1,5 +1,5 @@
 <template>
-    <div style="width:100%;">
+    <div style="width: 100%">
         <el-form label-width="100px">
             <el-form-item label="Time range">
                 <el-date-picker
@@ -8,8 +8,7 @@
                     :shortcuts="shortcuts"
                     range-separator="To"
                     start-placeholder="Start date"
-                    end-placeholder="End date"
-                />
+                    end-placeholder="End date" />
             </el-form-item>
             <el-form-item label="Keyword">
                 <el-input v-model="keyword" />
@@ -18,21 +17,31 @@
 
         <el-table :data="data" style="width: 100%" :height="height">
             <el-table-column prop="createdAt" label="Date" width="200px" />
-            <el-table-column prop="level" label="Level"  width="100px"/>
+            <el-table-column prop="level" label="Level" width="100px" />
             <el-table-column label="Content">
                 <template #default="scope">
-                    <span v-if="scope.row.type==='string'">{{ scope.row.content }}</span>
-                    <json-viewer v-if="scope.row.type==='object'" :value="JSON.parse(scope.row.content)"></json-viewer>
+                    <span v-if="scope.row.type === 'string'">{{
+                        scope.row.content
+                    }}</span>
+                    <json-viewer
+                        v-if="scope.row.type === 'object'"
+                        :value="JSON.parse(scope.row.content)"></json-viewer>
                 </template>
             </el-table-column>
         </el-table>
 
-        <el-pagination style="margin-top:20px;" layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="page" @update:current-page="e=>page=e" @change="getData" />
+        <el-pagination
+            style="margin-top: 20px"
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="pageSize"
+            :current-page="page"
+            @update:current-page="e => (page = e)"
+            @change="getData" />
     </div>
 </template>
 
 <script setup>
-
 import JsonViewer from 'vue-json-viewer'
 
 import { rpc } from '../utils/rpc'
@@ -108,7 +117,12 @@ const height = computed(() => {
 })
 
 const getData = async () => {
-    const res = await rpc.syslog.get(timerange.value, keyword.value, (page.value - 1) * pageSize.value, pageSize.value)
+    const res = await rpc.syslog.get(
+        timerange.value,
+        keyword.value,
+        (page.value - 1) * pageSize.value,
+        pageSize.value
+    )
     res.data.forEach(item => {
         item.createdAt = new Date(item.createdAt).toLocaleString()
     })
@@ -130,5 +144,4 @@ const debounce = (fn, delay) => {
 
 watch(() => timerange.value, getData)
 watch(() => keyword.value, debounce(getData, 500))
-
 </script>

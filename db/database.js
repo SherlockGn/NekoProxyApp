@@ -18,7 +18,7 @@ const connection = new Sequelize(databaseName, username, password, {
     dialect,
     storage,
     host,
-    logging: false,
+    logging: false
 })
 
 try {
@@ -48,5 +48,5 @@ const toWhere = customWhere => {
 
 module.exports = {
     connection,
-    toWhere,
+    toWhere
 }

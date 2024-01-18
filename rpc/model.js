@@ -1,4 +1,9 @@
-const { queryModels, queryModelById, createModel, deleteModel } = require('../service/datacenter')
+const {
+    queryModels,
+    queryModelById,
+    createModel,
+    deleteModel
+} = require('../service/datacenter')
 
 module.exports = {
     add: createModel,

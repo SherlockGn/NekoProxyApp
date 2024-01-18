@@ -14,19 +14,20 @@ router.post('/api/cicd/hook', async (req, res, next) => {
     await new Promise((resolve, reject) => {
         json()(req, res, resolve)
     })
-    
+
     logger.info({
         type: 'githook',
         headers: req.headers,
         body: req.body
     })
 
-    let server = '', gitName = ''
-    if (!!req.headers["x-gitee-event"]) {
+    let server = '',
+        gitName = ''
+    if (!!req.headers['x-gitee-event']) {
         server = 'gitee'
         gitName = req.body.project.name
     }
-    if (!!req.headers["x-github-event"]) {
+    if (!!req.headers['x-github-event']) {
         server = 'github'
         gitName = req.body.repository.name
     }

@@ -1,5 +1,5 @@
 <template>
-    <div style="width:100%;">
+    <div style="width: 100%">
         <el-form label-width="100px">
             <el-form-item label="Time range">
                 <el-date-picker
@@ -8,8 +8,7 @@
                     :shortcuts="shortcuts"
                     range-separator="To"
                     start-placeholder="Start date"
-                    end-placeholder="End date"
-                />
+                    end-placeholder="End date" />
             </el-form-item>
             <el-form-item label="Keyword">
                 <el-input v-model="keyword" />
@@ -18,22 +17,37 @@
 
         <el-table :data="data" style="width: 100%" :height="height">
             <el-table-column prop="createdAt" label="Date" width="200px" />
-            <el-table-column prop="transaction" label="Transaction ID"  width="350px"/>
-            <el-table-column prop="status" label="Status code"  width="130px"/>
-            <el-table-column prop="db" label="Database"  width="130px"/>
-            <el-table-column prop="model" label="Model"  width="130px"/>
-            <el-table-column prop="type" label="API type"  width="130px"/>
-            <el-table-column prop="reqLength" label="Request length"  width="130px"/>
-            <el-table-column prop="resLength" label="Response length"  width="140px"/>
-            <el-table-column prop="duration" label="Duration"  width="130px"/>
+            <el-table-column
+                prop="transaction"
+                label="Transaction ID"
+                width="350px" />
+            <el-table-column prop="status" label="Status code" width="130px" />
+            <el-table-column prop="db" label="Database" width="130px" />
+            <el-table-column prop="model" label="Model" width="130px" />
+            <el-table-column prop="type" label="API type" width="130px" />
+            <el-table-column
+                prop="reqLength"
+                label="Request length"
+                width="130px" />
+            <el-table-column
+                prop="resLength"
+                label="Response length"
+                width="140px" />
+            <el-table-column prop="duration" label="Duration" width="130px" />
         </el-table>
 
-        <el-pagination style="margin-top:20px;" layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="page" @update:current-page="e=>page=e" @change="getData" />
+        <el-pagination
+            style="margin-top: 20px"
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="pageSize"
+            :current-page="page"
+            @update:current-page="e => (page = e)"
+            @change="getData" />
     </div>
 </template>
 
 <script setup>
-
 import JsonViewer from 'vue-json-viewer'
 
 import { rpc } from '../utils/rpc'
@@ -109,7 +123,12 @@ const height = computed(() => {
 })
 
 const getData = async () => {
-    const res = await rpc.restlog.get(timerange.value, keyword.value, (page.value - 1) * pageSize.value, pageSize.value)
+    const res = await rpc.restlog.get(
+        timerange.value,
+        keyword.value,
+        (page.value - 1) * pageSize.value,
+        pageSize.value
+    )
     res.data.forEach(item => {
         item.createdAt = new Date(item.createdAt).toLocaleString()
     })
@@ -131,5 +150,4 @@ const debounce = (fn, delay) => {
 
 watch(() => timerange.value, getData)
 watch(() => keyword.value, debounce(getData, 500))
-
 </script>

@@ -5,11 +5,11 @@ const startServer = async port => {
     const server = await new Promise((resolve, reject) => {
         let server = null
         server = app.listen(port)
-        server.on("listening", () => {
+        server.on('listening', () => {
             logger.info(`Proxy server (${port}) started successfully.`)
             resolve(server)
         })
-        server.on("error", e => {
+        server.on('error', e => {
             logger.error(`Proxy server (${port}) failed to start.`)
             reject(e)
         })

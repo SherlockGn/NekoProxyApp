@@ -1,4 +1,4 @@
-const { v4 }= require('uuid')
+const { v4 } = require('uuid')
 
 const { connection } = require('../db/database')
 const { Rest } = require('../db/rest')
@@ -26,13 +26,16 @@ const update = async (id, rest) => {
 }
 
 const renewToken = async id => {
-    return await Rest.update({
-        token: v4()
-    }, {
-        where: {
-            id
+    return await Rest.update(
+        {
+            token: v4()
+        },
+        {
+            where: {
+                id
+            }
         }
-    })
+    )
 }
 
 const del = async id => {

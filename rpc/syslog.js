@@ -21,9 +21,9 @@ const get = async (timerange, keyword, offset, limit) => {
             order: [['createdAt', 'DESC']]
         }),
         count: await SystemLog.count({
-            where,
+            where
         })
-    } 
+    }
 }
 
 module.exports = {

@@ -34,13 +34,18 @@ const updateSeq = async seqList => {
     const rets = []
     await connection.transaction(async t => {
         for (const seq of seqList) {
-            rets.push(await Rule.update({
-                sequence: seq.sequence
-            }, {
-                where: {
-                    id: seq.id
-                }
-            }))
+            rets.push(
+                await Rule.update(
+                    {
+                        sequence: seq.sequence
+                    },
+                    {
+                        where: {
+                            id: seq.id
+                        }
+                    }
+                )
+            )
         }
     })
     refreshProxies()

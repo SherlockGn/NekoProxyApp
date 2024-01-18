@@ -35,9 +35,9 @@ const get = async (timerange, keyword, offset, limit) => {
             order: [['createdAt', 'DESC']]
         }),
         count: await ProjectLog.count({
-            where,
+            where
         })
-    } 
+    }
 }
 
 module.exports = {

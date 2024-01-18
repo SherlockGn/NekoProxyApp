@@ -8,8 +8,7 @@
                     :shortcuts="shortcuts"
                     range-separator="To"
                     start-placeholder="Start date"
-                    end-placeholder="End date"
-                />
+                    end-placeholder="End date" />
             </el-form-item>
             <el-form-item label="Keyword">
                 <el-input v-model="keyword" />
@@ -17,30 +16,51 @@
         </el-form>
 
         <el-table :data="data" :height="height">
-            <el-table-column prop="createdAt" label="Date" width="200px" style="width: 100%" />
-            <el-table-column prop="name" label="Name"  width="150px"/>
-            <el-table-column prop="command" label="Command"  width="130px"/>
-            <el-table-column prop="trigger" label="Triggered by" width="130px"/>
+            <el-table-column
+                prop="createdAt"
+                label="Date"
+                width="200px"
+                style="width: 100%" />
+            <el-table-column prop="name" label="Name" width="150px" />
+            <el-table-column prop="command" label="Command" width="130px" />
+            <el-table-column
+                prop="trigger"
+                label="Triggered by"
+                width="130px" />
             <el-table-column label="Output" width="300px">
                 <template #default="scope">
-                    <span v-if="!isObject(scope.row.output)">{{ scope.row.output }}</span>
-                    <json-viewer v-if="isObject(scope.row.output)" :value="JSON.parse(scope.row.output)"></json-viewer>
+                    <span v-if="!isObject(scope.row.output)">{{
+                        scope.row.output
+                    }}</span>
+                    <json-viewer
+                        v-if="isObject(scope.row.output)"
+                        :value="JSON.parse(scope.row.output)"></json-viewer>
                 </template>
             </el-table-column>
             <el-table-column label="Error" width="300px">
                 <template #default="scope">
-                    <span v-if="!isObject(scope.row.error)">{{ scope.row.error }}</span>
-                    <json-viewer v-if="isObject(scope.row.error)" :value="JSON.parse(scope.row.error)"></json-viewer>
+                    <span v-if="!isObject(scope.row.error)">{{
+                        scope.row.error
+                    }}</span>
+                    <json-viewer
+                        v-if="isObject(scope.row.error)"
+                        :value="JSON.parse(scope.row.error)"></json-viewer>
                 </template>
             </el-table-column>
         </el-table>
 
-        <el-pagination style="margin-top:20px;" layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="page" @update:current-page="e=>page=e" @change="getData" />
+        <el-pagination
+            style="margin-top: 20px"
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="pageSize"
+            :current-page="page"
+            @update:current-page="e => (page = e)"
+            @change="getData" />
     </div>
 </template>
 
 <script setup>
-
 import JsonViewer from 'vue-json-viewer'
 
 import { rpc } from '../utils/rpc'
@@ -116,7 +136,12 @@ const height = computed(() => {
 })
 
 const getData = async () => {
-    const res = await rpc.projectlog.get(timerange.value, keyword.value, (page.value - 1) * pageSize.value, pageSize.value)
+    const res = await rpc.projectlog.get(
+        timerange.value,
+        keyword.value,
+        (page.value - 1) * pageSize.value,
+        pageSize.value
+    )
     res.data.forEach(item => {
         item.createdAt = new Date(item.createdAt).toLocaleString()
     })
@@ -136,7 +161,7 @@ const debounce = (fn, delay) => {
     }
 }
 
-const isObject = (item) => {
+const isObject = item => {
     if (item === null) {
         return false
     }
@@ -149,5 +174,4 @@ const isObject = (item) => {
 
 watch(() => timerange.value, getData)
 watch(() => keyword.value, debounce(getData, 500))
-
 </script>

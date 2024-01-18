@@ -52,7 +52,6 @@ const doWithLog = async (action, name, command, trigger) => {
         })
         throw error
     }
-    
 }
 
 const getProjects = async () => {
@@ -72,23 +71,34 @@ const getProjectById = async id => {
 }
 
 const createProject = async proj => {
-    
-    await doWithLog(async () => await clone(proj.repo),
-        proj.name, 'git clone', 'init')
+    await doWithLog(
+        async () => await clone(proj.repo),
+        proj.name,
+        'git clone',
+        'init'
+    )
 
     const { projectPath } = getPath(proj)
 
     try {
         if (proj.branch !== null) {
-            await doWithLog(async () => await checkout(projectPath, proj.branch),
-                proj.name, 'git checkout', 'init')
+            await doWithLog(
+                async () => await checkout(projectPath, proj.branch),
+                proj.name,
+                'git checkout',
+                'init'
+            )
         }
-    
+
         if (proj.type === 'NodeServer') {
-            await doWithLog(async () => await install(projectPath),
-                proj.name, 'npm install', 'init')
+            await doWithLog(
+                async () => await install(projectPath),
+                proj.name,
+                'npm install',
+                'init'
+            )
         }
-    } catch(error) {
+    } catch (error) {
         if (fs.existsSync(projectPath)) {
             fs.rmSync(projectPath, { recursive: true, force: true })
         }
@@ -104,7 +114,9 @@ const startProject = async id => {
         return
     }
     const { projectPath } = getPath(p)
-    const pmProject = (await get()).find(item => item.pm2_env.cwd === projectPath)
+    const pmProject = (await get()).find(
+        item => item.pm2_env.cwd === projectPath
+    )
     if (pmProject) {
         return await restart(pmProject.pm_id)
     }
@@ -121,7 +133,9 @@ const deleteProject = async id => {
         return
     }
     const { projectPath } = getPath(p)
-    const pmProject = (await get()).find(item => item.pm2_env.cwd === projectPath)
+    const pmProject = (await get()).find(
+        item => item.pm2_env.cwd === projectPath
+    )
     if (pmProject) {
         await del(pmProject.pm_id)
     }
@@ -135,15 +149,25 @@ const pullProject = async (id, trigger = 'manual') => {
         return
     }
     const { projectPath } = getPath(p)
-    const pmProject = (await get()).find(item => item.pm2_env.cwd === projectPath)
+    const pmProject = (await get()).find(
+        item => item.pm2_env.cwd === projectPath
+    )
     if (pmProject) {
         await stop(pmProject.pm_id)
     }
-    await doWithLog(async () => await pull(projectPath),
-        p.name, 'git pull', trigger)
+    await doWithLog(
+        async () => await pull(projectPath),
+        p.name,
+        'git pull',
+        trigger
+    )
     if (p.type === 'NodeServer') {
-        await doWithLog(async () => await install(projectPath),
-            p.name, 'npm install', trigger)
+        await doWithLog(
+            async () => await install(projectPath),
+            p.name,
+            'npm install',
+            trigger
+        )
     }
     if (pmProject) {
         await restart(pmProject.pm_id)
@@ -151,20 +175,21 @@ const pullProject = async (id, trigger = 'manual') => {
 }
 
 const pullProjectAuto = async (gitServer, gitName) => {
-    
-    const p = await Project.findOne({ where: {
-        repo: {
-            [Op.endsWith]: `/${gitName}.git`,
-            [Op.substring]: `/${gitServer}.com/`
+    const p = await Project.findOne({
+        where: {
+            repo: {
+                [Op.endsWith]: `/${gitName}.git`,
+                [Op.substring]: `/${gitServer}.com/`
+            }
         }
-    } })
+    })
 
     if (p) {
         return await pullProject(p.id, gitServer)
     }
 }
 
-const clone = async (repo) => {
+const clone = async repo => {
     if (!fs.existsSync(base)) {
         fs.mkdirSync(base, { recursive: true })
     }
@@ -178,22 +203,26 @@ const checkout = async (dir, branch) => {
     return await git.checkout(branch)
 }
 
-const pull = async (dir) => {
+const pull = async dir => {
     const git = simpleGit({ baseDir: dir })
     return await git.pull()
 }
 
 const install = async dir => {
     await new Promise((resolve, reject) => {
-        exec('npm install', {
-            cwd: dir
-        }, (err, stdout, stderr) => {
-            if (err) {
-                reject(err)
-                return
+        exec(
+            'npm install',
+            {
+                cwd: dir
+            },
+            (err, stdout, stderr) => {
+                if (err) {
+                    reject(err)
+                    return
+                }
+                resolve(stdout)
             }
-            resolve(stdout)
-        })
+        )
     })
 }
 
@@ -209,19 +238,22 @@ const start = async project => {
     }
 
     return await new Promise((resolve, reject) => {
-        pm2.start({
-            script,
-            args,
-            name: name,
-            cwd: projectPath,
-            log_file: logPath
-        }, (err, data) => {
-            if (err) {
-                reject(err)
-                return
+        pm2.start(
+            {
+                script,
+                args,
+                name: name,
+                cwd: projectPath,
+                log_file: logPath
+            },
+            (err, data) => {
+                if (err) {
+                    reject(err)
+                    return
+                }
+                resolve(data)
             }
-            resolve(data)
-        })
+        )
     })
 }
 

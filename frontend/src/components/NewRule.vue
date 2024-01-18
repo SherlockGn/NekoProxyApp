@@ -43,22 +43,52 @@
             <el-form-item label="Enforce HTTPS">
                 <el-checkbox v-model="rule.https" />
             </el-form-item>
-            <el-form-item label="Filter">
+            <el-form-item>
+                <template #label>
+                    <el-text>
+                        Filter <el-icon @click="showNotification(info.rule.filter)"><i-ep-info-filled /></el-icon>
+                    </el-text>
+                </template>
                 <FuncEditor v-model="rule.filter" funcName="filter" :paramList="['req']" placeholder="    return true" />
             </el-form-item>
-            <el-form-item label="Forward path">
+            <el-form-item label="">
+                <template #label>
+                    <el-text>
+                        Forward path <el-icon @click="showNotification(info.rule.path)"><i-ep-info-filled /></el-icon>
+                    </el-text>
+                </template>
                 <FuncEditor v-model="rule.path" funcName="path" :paramList="['req']" placeholder="    return req.originalUrl" />
             </el-form-item>
-            <el-form-item label="Request">
+            <el-form-item>
+                <template #label>
+                    <el-text>
+                        Request <el-icon @click="showNotification(info.rule.req)"><i-ep-info-filled /></el-icon>
+                    </el-text>
+                </template>
                 <FuncEditor v-model="rule.req" funcName="req" :paramList="['req']" placeholder="    return req" />
             </el-form-item>
             <el-form-item label="Request body">
+                <template #label>
+                    <el-text>
+                        Request body<el-icon @click="showNotification(info.rule.reqBody)"><i-ep-info-filled /></el-icon>
+                    </el-text>
+                </template>
                 <FuncEditor v-model="rule.reqBody" funcName="reqBody" :paramList="['body']" placeholder="    return body" />
             </el-form-item>
             <el-form-item label="Response headers">
+                <template #label>
+                    <el-text>
+                        Response headers<el-icon @click="showNotification(info.rule.resHeader)"><i-ep-info-filled /></el-icon>
+                    </el-text>
+                </template>
                 <FuncEditor v-model="rule.resHeader" funcName="resHeader" :paramList="['headers']" placeholder="    return headers" />
             </el-form-item>
-            <el-form-item label="Response body">
+            <el-form-item>
+                <template #label>
+                    <el-text>
+                        Response body<el-icon @click="showNotification(info.rule.resBody)"><i-ep-info-filled /></el-icon>
+                    </el-text>
+                </template>
                 <FuncEditor v-model="rule.resBody" funcName="resBody" :paramList="['body']" placeholder="    return body" />
             </el-form-item>
             <el-form-item>
@@ -73,6 +103,7 @@
 
 import { useRoute, useRouter } from 'vue-router'
 import { rpc } from '../utils/rpc'
+import { info } from '../utils/info'
 import { toastAction } from '../utils/toastAction'
 
 const route = useRoute()
@@ -145,8 +176,26 @@ const cancel = () => {
     })
 }
 
+const showNotification = (message) => {
+    ElNotification({
+    title: 'Hint',
+    message,
+    type: 'info',
+    dangerouslyUseHTMLString: true,
+    duration: 0
+  })
+}
+
 </script>
 
 <style scoped>
+
+.el-notification {
+    --el-notification-width: 1000px !important;
+}
+
+.el-icon {
+    margin-left: 5px;
+}
 
 </style>

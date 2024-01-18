@@ -33,16 +33,24 @@ const get = async (timerange, keyword, offset, limit) => {
             where,
             offset,
             limit,
-            include: [ Rule ],
+            include: [Rule],
             order: [['createdAt', 'DESC']]
         }),
         count: await ProxyLog.count({
-            where,
+            where
         })
-    } 
+    }
 }
 
-const stat = async (timerange, customWhere, isTimeChart, timechartLevel, func, col, groupBy) => {
+const stat = async (
+    timerange,
+    customWhere,
+    isTimeChart,
+    timechartLevel,
+    func,
+    col,
+    groupBy
+) => {
     const where = {}
 
     where[Op.and] = []
@@ -59,7 +67,7 @@ const stat = async (timerange, customWhere, isTimeChart, timechartLevel, func, c
         where[Op.and].push(toWhere(customWhere))
     }
 
-    const attributes = [... groupBy]
+    const attributes = [...groupBy]
 
     if (isTimeChart) {
         let formatter = ''
@@ -81,12 +89,15 @@ const stat = async (timerange, customWhere, isTimeChart, timechartLevel, func, c
         if (timechartLevel === 'second') {
             formatter = '%Y-%m-%dT%H:%M:%S.000Z'
         }
-        attributes.push([connection.fn('strftime', formatter, connection.col('createdAt')), 'date_format'])
+        attributes.push([
+            connection.fn('strftime', formatter, connection.col('createdAt')),
+            'date_format'
+        ])
     }
 
     attributes.push([connection.fn(func, connection.col(col)), 'stat_target'])
 
-    const group = [... groupBy]
+    const group = [...groupBy]
 
     if (isTimeChart) {
         group.push('date_format')
@@ -95,7 +106,7 @@ const stat = async (timerange, customWhere, isTimeChart, timechartLevel, func, c
     return await ProxyLog.findAll({
         where,
         attributes,
-        group,
+        group
     })
 }
 

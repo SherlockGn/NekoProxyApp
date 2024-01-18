@@ -41,9 +41,9 @@ const get = async (timerange, keyword, offset, limit) => {
             order: [['createdAt', 'DESC']]
         }),
         count: await RestLog.count({
-            where,
+            where
         })
-    } 
+    }
 }
 
 module.exports = {

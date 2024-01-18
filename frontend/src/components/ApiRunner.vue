@@ -1,21 +1,40 @@
 <template>
-    <div style="padding: 10px; border: #409EFF 1px solid;">
+    <div style="padding: 10px; border: #409eff 1px solid">
         <el-tag>{{ method }}</el-tag>
-        <el-input style="margin-top: 5px;" v-model="urlSuffix" :disabled="urlSuffixPlaceholder===null" :placeholder="urlSuffixPlaceholder">
+        <el-input
+            style="margin-top: 5px"
+            v-model="urlSuffix"
+            :disabled="urlSuffixPlaceholder === null"
+            :placeholder="urlSuffixPlaceholder">
             <template #prepend>{{ urlPrefix }}</template>
         </el-input>
-        <func-editor v-model="body" v-if="bodyExample!==null" :params="[]" :showHeader="false" style="margin-top: 5px;"></func-editor>
-        <el-button style="margin-top: 10px;" type="primary" @click="send" size="small">Try it out</el-button>
-        <div style="margin-top: 20px" v-if="result!==null">
+        <func-editor
+            v-model="body"
+            v-if="bodyExample !== null"
+            :params="[]"
+            :showHeader="false"
+            style="margin-top: 5px"></func-editor>
+        <el-button
+            style="margin-top: 10px"
+            type="primary"
+            @click="send"
+            size="small"
+            >Try it out</el-button
+        >
+        <div style="margin-top: 20px" v-if="result !== null">
             <el-tag>{{ result.status }}</el-tag>
-            <br>
-            <el-input type="textarea" style="margin-top: 5px;" :rows="5" readonly :value="result.data"></el-input>
+            <br />
+            <el-input
+                type="textarea"
+                style="margin-top: 5px"
+                :rows="5"
+                readonly
+                :value="result.data"></el-input>
         </div>
     </div>
 </template>
 
 <script setup>
-
 import { host } from '../utils/host'
 import JSON5 from 'json5'
 
@@ -57,12 +76,12 @@ onMounted(() => {
 })
 
 const send = async () => {
-
     if (props.urlSuffixRequired && urlSuffix.value === '') {
         return
     }
 
-    const contentType = props.bodyExample === null ? undefined : 'application/json'
+    const contentType =
+        props.bodyExample === null ? undefined : 'application/json'
     const headers = {
         'Authorization': props.token
     }
@@ -81,11 +100,11 @@ const send = async () => {
     const rsp = await fetch(host + props.urlPrefix + urlSuffix.value, {
         method: props.method,
         headers,
-        body: props.bodyExample === null ? undefined : b,
+        body: props.bodyExample === null ? undefined : b
     })
 
     result.value = {
-        status:  rsp.status,
+        status: rsp.status,
         data: await rsp.text()
     }
 
@@ -94,5 +113,4 @@ const send = async () => {
         result.value.data = JSON.stringify(result.value.data, null, 4)
     } catch {}
 }
-
 </script>

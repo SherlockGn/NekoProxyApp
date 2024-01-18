@@ -1,16 +1,15 @@
 const proxy = require('express-http-proxy')
 
 const { Rule } = require('../db/rule')
-const { port } = require('../config.json');
-const { logger } = require('./log');
+const { port } = require('../config.json')
+const { logger } = require('./log')
 
 const removeIf = (array, callback) => {
     let i = 0
     while (i < array.length) {
         if (callback(array[i], i)) {
             array.splice(i, 1)
-        }
-        else {
+        } else {
             ++i
         }
     }
@@ -36,7 +35,7 @@ const getProxyResolver = rule => {
             }
             return filtered
         },
-        proxyReqPathResolver: async (req) => {
+        proxyReqPathResolver: async req => {
             const method = getFunctionByStringContent(['req'], rule.path)
             return method(req)
         },
@@ -53,7 +52,10 @@ const getProxyResolver = rule => {
             return method(proxyResData)
         },
         userResHeaderDecorator: async (headers, req, res) => {
-            const method = getFunctionByStringContent(['headers'], rule.resHeader)
+            const method = getFunctionByStringContent(
+                ['headers'],
+                rule.resHeader
+            )
             return method(headers)
         },
         limit: rule.limit,
@@ -66,17 +68,14 @@ const getProxyResolver = rule => {
 }
 
 const refreshProxies = async () => {
-
     const { app, servers } = require('./app')
     const { startServer, stopServer } = require('./servers')
-    
+
     const rules = await Rule.findAll({
         where: {
             enabled: true
         },
-        order: [
-            ['sequence', 'ASC']
-        ]
+        order: [['sequence', 'ASC']]
     })
 
     const proxies = rules.map(rule => getProxyResolver(rule.dataValues))
@@ -92,8 +91,8 @@ const refreshProxies = async () => {
     let portsToOpen = updatePorts.filter(p => !ports.includes(p))
     let portsToClose = ports.filter(p => !updatePorts.includes(p) && p !== port)
 
-    portsToOpen = [... new Set(portsToOpen)]
-    portsToClose = [... new Set(portsToClose)]
+    portsToOpen = [...new Set(portsToOpen)]
+    portsToClose = [...new Set(portsToClose)]
 
     logger.info({
         portsToOpen,
@@ -101,21 +100,16 @@ const refreshProxies = async () => {
     })
 
     try {
-
         for (const p of portsToOpen) {
             await startServer(p)
         }
-    
+
         for (const p of portsToClose) {
             await stopServer(p)
         }
-
-    }
-    catch (ex) {
+    } catch (ex) {
         logger.error(ex)
     }
-
-    
 }
 
 module.exports = {

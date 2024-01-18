@@ -1,5 +1,13 @@
 const { connection } = require('../db/database')
-const { createProject, getProjects, getProjectById, updateProject, startProject, pullProject, deleteProject } = require('../service/project')
+const {
+    createProject,
+    getProjects,
+    getProjectById,
+    updateProject,
+    startProject,
+    pullProject,
+    deleteProject
+} = require('../service/project')
 
 module.exports = {
     create: createProject,

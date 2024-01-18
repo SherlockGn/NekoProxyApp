@@ -4,12 +4,12 @@ const invoke = async (module, func, args) => {
     const res = await fetch(host + '/api/rpc', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             module,
             func,
-            args,
+            args
         })
     })
     if (res.status > 300) {
@@ -17,7 +17,7 @@ const invoke = async (module, func, args) => {
         try {
             errorMsg = (await res.json()).error
             if (!errorMsg) {
-                throw new Error
+                throw new Error()
             }
         } catch {
             errorMsg = 'unknow error occurs'
@@ -35,14 +35,20 @@ const invoke = async (module, func, args) => {
     }
 }
 
-export const rpc = new Proxy({}, {
-    get: (target, module) => {
-        return new Proxy({}, {
-            get: (target, func) => {
-                return (...args) => invoke(module, func, args)
-            }
-        })
+export const rpc = new Proxy(
+    {},
+    {
+        get: (target, module) => {
+            return new Proxy(
+                {},
+                {
+                    get: (target, func) => {
+                        return (...args) => invoke(module, func, args)
+                    }
+                }
+            )
+        }
     }
-})
+)
 
 window.rpc = rpc

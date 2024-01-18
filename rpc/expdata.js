@@ -1,4 +1,9 @@
-const { createData, queryData, updateData, deleteData } = require('../service/datacenter')
+const {
+    createData,
+    queryData,
+    updateData,
+    deleteData
+} = require('../service/datacenter')
 
 module.exports = {
     add: createData,

@@ -37,5 +37,5 @@ const ProjectLog = connection.define('projectLog', {
 })
 
 module.exports = {
-    ProjectLog,
+    ProjectLog
 }

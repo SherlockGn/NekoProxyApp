@@ -12,7 +12,6 @@ const { Project } = require('../db/project')
 const { ProjectLog } = require('../db/projectLog')
 
 const init = async () => {
-
     Rule.hasMany(ProxyLog)
     ProxyLog.belongsTo(Rule)
 
@@ -21,7 +20,7 @@ const init = async () => {
 
     Model.hasOne(Rest, { onDelete: 'cascade' })
     Rest.belongsTo(Model)
-    
+
     await connection.sync({ alter: { drop: false } })
 }
 

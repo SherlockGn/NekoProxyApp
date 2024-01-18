@@ -1,5 +1,5 @@
 <template>
-    <div style="width:80%;">
+    <div style="width: 80%">
         <el-form :model="project" label-width="180px">
             <el-form-item label="Name">
                 <el-input v-model="project.name" :disabled="!isCreate" />
@@ -11,43 +11,71 @@
                 <el-input v-model="project.repo" :disabled="!isCreate" />
             </el-form-item>
             <el-form-item label="Branch">
+                <template #label>
+                    <el-text>
+                        Branch<el-icon
+                            @click="showNotification(info.project.branch)"
+                            ><i-ep-info-filled
+                        /></el-icon>
+                    </el-text>
+                </template>
                 <el-input v-model="project.branch" :disabled="!isCreate" />
             </el-form-item>
             <el-form-item label="Type">
-                <el-select v-model="project.type" placeholder="Select" size="default" :disabled="!isCreate">
+                <template #label>
+                    <el-text>
+                        Type<el-icon
+                            @click="showNotification(info.project.type)"
+                            ><i-ep-info-filled
+                        /></el-icon>
+                    </el-text>
+                </template>
+                <el-select
+                    v-model="project.type"
+                    placeholder="Select"
+                    size="default"
+                    :disabled="!isCreate">
                     <el-option
                         v-for="item in ['Static', 'NodeServer']"
                         :key="item"
                         :label="item"
-                        :value="item"
-                    />
+                        :value="item" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="Script" v-show="project.type==='NodeServer'">
-                <el-input v-model="project.script" />
+            <el-form-item label="Script" v-show="project.type === 'NodeServer'">
+                <el-input v-model="project.script" placeholder="e.g. main.js" />
             </el-form-item>
-            <el-form-item label="Port" v-show="project.type==='Static'">
+            <el-form-item label="Port" v-show="project.type === 'Static'">
                 <el-input-number v-model="project.port" />
             </el-form-item>
-            <el-form-item label="Args" v-show="project.type==='NodeServer'">
-                <el-input v-model="project.args" />
+            <el-form-item label="Args" v-show="project.type === 'NodeServer'">
+                <el-input
+                    v-model="project.args"
+                    placeholder="e.g. --port 12345 --force" />
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" :disabled="isLoading" @click="createOrUpdate">{{ isCreate ? 'Create': 'Update' }}</el-button>
+                <el-button
+                    type="primary"
+                    :disabled="isLoading"
+                    @click="createOrUpdate"
+                    >{{ isCreate ? 'Create' : 'Update' }}</el-button
+                >
                 <el-button @click="cancel">Cancel</el-button>
             </el-form-item>
             <el-form-item>
-                <el-icon class="is-loading" v-show="isLoading"><i-ep-loading/></el-icon>
+                <el-icon class="is-loading" v-show="isLoading"
+                    ><i-ep-loading
+                /></el-icon>
             </el-form-item>
         </el-form>
     </div>
 </template>
 
 <script setup>
-
 import { useRoute, useRouter } from 'vue-router'
 import { rpc } from '../utils/rpc'
 import { toastAction } from '../utils/toastAction'
+import { info } from '../utils/info'
 
 import JSON5 from 'json5'
 
@@ -104,12 +132,27 @@ const createOrUpdate = async () => {
     router.back()
 }
 
+const showNotification = message => {
+    ElNotification({
+        title: 'Hint',
+        message,
+        type: 'info',
+        dangerouslyUseHTMLString: true,
+        duration: 0
+    })
+}
+
 const cancel = () => {
     router.back()
 }
-
 </script>
 
 <style scoped>
+.el-notification {
+    --el-notification-width: 1000px !important;
+}
 
+.el-icon {
+    margin-left: 5px;
+}
 </style>

@@ -47,28 +47,40 @@ class DataCenterConn {
         })
         models.forEach(model => {
             const properties = {}
-            model.properties.map(i => i.dataValues).forEach(property => {
-                const pro = {}
-                pro.type = DataTypes[property.type]
-                pro.typeText = property.type
-                if (property.allowNull !== null) {
-                    pro.allowNull = property.allowNull
-                }
-                if (property.defaultValue !== null) {
-                    pro.defaultValue = JSON.parse(property.defaultValue)
-                    const prefix = '#DataTypes.'
-                    if (typeof pro.defaultValue === 'string' && pro.defaultValue.startsWith(prefix) && pro.defaultValue.endsWith('#')) {
-                        pro.defaultValue = DataTypes[pro.defaultValue.substring(prefix.length, pro.defaultValue.length - 1)]
+            model.properties
+                .map(i => i.dataValues)
+                .forEach(property => {
+                    const pro = {}
+                    pro.type = DataTypes[property.type]
+                    pro.typeText = property.type
+                    if (property.allowNull !== null) {
+                        pro.allowNull = property.allowNull
                     }
-                }
-                if (property.unique !== null) {
-                    pro.unique = property.unique
-                }
-                if (property.validate !== null) {
-                    pro.validate = JSON.parse(property.validate)
-                }
-                properties[property.name] = pro
-            })
+                    if (property.defaultValue !== null) {
+                        pro.defaultValue = JSON.parse(property.defaultValue)
+                        const prefix = '#DataTypes.'
+                        if (
+                            typeof pro.defaultValue === 'string' &&
+                            pro.defaultValue.startsWith(prefix) &&
+                            pro.defaultValue.endsWith('#')
+                        ) {
+                            pro.defaultValue =
+                                DataTypes[
+                                    pro.defaultValue.substring(
+                                        prefix.length,
+                                        pro.defaultValue.length - 1
+                                    )
+                                ]
+                        }
+                    }
+                    if (property.unique !== null) {
+                        pro.unique = property.unique
+                    }
+                    if (property.validate !== null) {
+                        pro.validate = JSON.parse(property.validate)
+                    }
+                    properties[property.name] = pro
+                })
             logger.trace({
                 name: model.name,
                 properties
@@ -117,7 +129,10 @@ class DataCenterConnFactory {
 
     static getConn(dbName) {
         if (!DataCenterConnFactory.connMappers[dbName]) {
-            DataCenterConnFactory.connMappers[dbName] = new DataCenterConn(dbName, 15000)
+            DataCenterConnFactory.connMappers[dbName] = new DataCenterConn(
+                dbName,
+                15000
+            )
             DataCenterConnFactory.connMappers[dbName].onclose = () => {
                 delete DataCenterConnFactory.connMappers[dbName]
             }
@@ -140,28 +155,33 @@ const queryDb = async () => {
     } catch {
         return []
     }
-    return fileNames.filter(f => f.endsWith('.db')).map(f => {
-        const file = fs.statSync(join(folder, f))
-        return {
-            size: file.size,
-            name: f.substring(0, f.lastIndexOf('.')),
-            createdAt: file.birthtime,
-            updatedAt: file.mtime
-        }
-    })
+    return fileNames
+        .filter(f => f.endsWith('.db'))
+        .map(f => {
+            const file = fs.statSync(join(folder, f))
+            return {
+                size: file.size,
+                name: f.substring(0, f.lastIndexOf('.')),
+                createdAt: file.birthtime,
+                updatedAt: file.mtime
+            }
+        })
 }
 
-const createDb = async (dbName) => {
+const createDb = async dbName => {
     const instance = await DataCenterConnFactory.getConn(dbName).instance()
     await instance.authenticate()
 }
 
-const deleteDb = async (dbName) => {
-    await DataCenterConnFactory.actionIfConnected(dbName, async conn => await conn.close())
+const deleteDb = async dbName => {
+    await DataCenterConnFactory.actionIfConnected(
+        dbName,
+        async conn => await conn.close()
+    )
     fs.unlinkSync(join(folder, dbName + '.db'))
 }
 
-const queryModels  = async (dbName) => {
+const queryModels = async dbName => {
     return await Model.findAll({ where: { dbName } })
 }
 
@@ -169,22 +189,24 @@ const queryModelById = async id => {
     return await Model.findByPk(id)
 }
 
-const createModel = async (model) => {
+const createModel = async model => {
     const ret = await Model.create(model)
     await DataCenterConnFactory.getConn(model.dbName).init()
 
     return ret
 }
 
-const deleteModel = async (id) => {
+const deleteModel = async id => {
     const model = await Model.findByPk(id)
     await Model.destroy({ where: { id } })
-    const instance = await DataCenterConnFactory.getConn(model.dbName).instance()
+    const instance = await DataCenterConnFactory.getConn(
+        model.dbName
+    ).instance()
     await instance.models[model.name].drop()
     await DataCenterConnFactory.getConn(model.dbName).init()
 }
 
-const queryProperties = async (modelId) => {
+const queryProperties = async modelId => {
     return await Property.findAll({ where: { modelId } })
 }
 
@@ -194,8 +216,12 @@ const queryPropertyById = async id => {
 
 const createProperty = async (property, modelId) => {
     property.modelId = modelId
-    property.defaultValue = property.defaultValue === null ? null : JSON.stringify(property.defaultValue)
-    property.validate = property.validate === null ? null : JSON.stringify(property.validate)
+    property.defaultValue =
+        property.defaultValue === null
+            ? null
+            : JSON.stringify(property.defaultValue)
+    property.validate =
+        property.validate === null ? null : JSON.stringify(property.validate)
 
     let ret
     let model
@@ -210,7 +236,7 @@ const createProperty = async (property, modelId) => {
         await DataCenterConnFactory.getConn(model.dbName).init()
         throw error
     }
-    
+
     return ret
 }
 
@@ -225,7 +251,10 @@ const updateProperty = async (property, id) => {
     let model
     try {
         await connection.transaction(async t => {
-            ret = await Property.update(property, { where: { id }, transaction: t })
+            ret = await Property.update(property, {
+                where: { id },
+                transaction: t
+            })
             property = await Property.findByPk(id, { transaction: t })
             model = await Model.findByPk(property.modelId, { transaction: t })
             await DataCenterConnFactory.getConn(model.dbName).init(t)
@@ -235,12 +264,11 @@ const updateProperty = async (property, id) => {
         await DataCenterConnFactory.getConn(model.dbName).init()
         throw error
     }
-    
 
     return ret
 }
 
-const deleteProperty = async (id) => {
+const deleteProperty = async id => {
     const property = await Property.findByPk(id)
     const ret = await Property.destroy({ where: { id } })
     const model = await Model.findByPk(property.modelId)
@@ -255,7 +283,9 @@ const deleteProperty = async (id) => {
 
 const createData = async (modelId, data) => {
     const model = await Model.findByPk(modelId)
-    const instance = await DataCenterConnFactory.getConn(model.dbName).instance()
+    const instance = await DataCenterConnFactory.getConn(
+        model.dbName
+    ).instance()
     if (data instanceof Array) {
         return instance.models[model.name].bulkCreate(data, {
             validate: true
@@ -266,7 +296,9 @@ const createData = async (modelId, data) => {
 
 const queryData = async (modelId, where, offset, limit, order) => {
     const model = await Model.findByPk(modelId)
-    const instance = await DataCenterConnFactory.getConn(model.dbName).instance()
+    const instance = await DataCenterConnFactory.getConn(
+        model.dbName
+    ).instance()
     return instance.models[model.name].findAll({
         where: toWhere(where),
         offset,
@@ -280,12 +312,17 @@ const updateDataItem = async (instance, model, data, t) => {
         throw new Error('id MUST be specified')
     }
     const id = data.id
-    return await instance.models[model.name].update(data, { where: { id }, transaction: t } )
+    return await instance.models[model.name].update(data, {
+        where: { id },
+        transaction: t
+    })
 }
 
 const updateData = async (modelId, data) => {
     const model = await Model.findByPk(modelId)
-    const instance = await DataCenterConnFactory.getConn(model.dbName).instance()
+    const instance = await DataCenterConnFactory.getConn(
+        model.dbName
+    ).instance()
     if (data instanceof Array) {
         return await instance.transaction(async t => {
             for (const item of data) {
@@ -298,11 +335,16 @@ const updateData = async (modelId, data) => {
 
 const deleteData = async (modelId, idList) => {
     const model = await Model.findByPk(modelId)
-    const instance = await DataCenterConnFactory.getConn(model.dbName).instance()
+    const instance = await DataCenterConnFactory.getConn(
+        model.dbName
+    ).instance()
     if (idList instanceof Array) {
         return await instance.transaction(async t => {
             for (const id of idList) {
-                await instance.models[model.name].destroy({ where: { id }, transaction: t })
+                await instance.models[model.name].destroy({
+                    where: { id },
+                    transaction: t
+                })
             }
         })
     }

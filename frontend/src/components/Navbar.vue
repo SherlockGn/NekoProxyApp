@@ -1,98 +1,88 @@
 <template>
-    <el-menu style="height: calc(100vh - 150px);">
-          <el-sub-menu index="1">
+    <el-menu style="height: calc(100vh - 150px)">
+        <el-sub-menu index="Proxy">
             <template #title>
-              <el-icon><i-ep-location /></el-icon>
-              <span>Proxy</span>
+                <el-icon><i-ep-location /></el-icon>
+                <span>Proxy</span>
             </template>
-            <el-menu-item>
-              <router-link to="/rule">
+            <el-menu-item @click="goto('Rule')" index="Rule">
                 <el-icon><i-ep-tickets /></el-icon>
                 <span>Proxy rules</span>
-              </router-link>
             </el-menu-item>
-            <el-menu-item>
-              <router-link to="/proxylog">
+            <el-menu-item @click="goto('ProxyLog')" index="ProxyLog">
                 <el-icon><i-ep-picture /></el-icon>
                 <span>Proxy logs</span>
-              </router-link>
             </el-menu-item>
-            <el-menu-item>
-              <router-link to="/proxystat">
+            <el-menu-item @click="goto('ProxyStat')" index="ProxyStat">
                 <el-icon><i-ep-data-line /></el-icon>
                 <span>Proxy record statistics</span>
-              </router-link>
             </el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="2">
+        </el-sub-menu>
+        <el-sub-menu index="Logs">
             <template #title>
-              <el-icon><i-ep-notebook /></el-icon>
-              <span>Logs</span>
+                <el-icon><i-ep-notebook /></el-icon>
+                <span>Logs</span>
             </template>
-            <el-menu-item>
-              <router-link to="/systemlog">
+            <el-menu-item @click="goto('SystemLog')" index="SystemLog">
                 <el-icon><i-ep-cpu /></el-icon>
                 <span>System logs</span>
-              </router-link>
             </el-menu-item>
-            <el-menu-item>
-              <router-link to="/apilog">
+            <el-menu-item @click="goto('ApiLog')" index="ApiLog">
                 <el-icon><i-ep-chat-line-round /></el-icon>
                 <span>API logs</span>
-              </router-link>
             </el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="3">
+        </el-sub-menu>
+        <el-sub-menu index="Data center">
             <template #title>
-              <el-icon><i-ep-files /></el-icon>
-              <span>Data center</span>
+                <el-icon><i-ep-files /></el-icon>
+                <span>Data center</span>
             </template>
-            <el-menu-item>
-              <router-link to="/database">
+            <el-menu-item @click="goto('Database')" index="Database">
                 <el-icon><i-ep-setting /></el-icon>
                 <span>Configure</span>
-              </router-link>
             </el-menu-item>
-            <el-menu-item>
-              <router-link to="/restLog">
+            <el-menu-item @click="goto('RestLog')" index="RestLog">
                 <el-icon><i-ep-memo /></el-icon>
                 <span>RESTful API logs</span>
-              </router-link>
             </el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="4">
+        </el-sub-menu>
+        <el-sub-menu index="CICD">
             <template #title>
-              <el-icon><i-ep-connection /></el-icon>
-              <span>CICD</span>
+                <el-icon><i-ep-connection /></el-icon>
+                <span>CI/CD</span>
             </template>
-            <el-menu-item>
-              <router-link to="/project">
+            <el-menu-item @click="goto('Project')" index="Project">
                 <el-icon><i-ep-reading /></el-icon>
                 <span>Project</span>
-              </router-link>
             </el-menu-item>
-            <el-menu-item>
-              <router-link to="/pm2">
+            <el-menu-item @click="goto('PM2')" index="PM2">
                 <el-icon><i-ep-shopping-bag /></el-icon>
                 <span>PM2</span>
-              </router-link>
             </el-menu-item>
-            <el-menu-item>
-              <router-link to="/projectlog">
+            <el-menu-item @click="goto('ProjectLog')" index="ProjectLog">
                 <el-icon><i-ep-coin /></el-icon>
                 <span>Project Log</span>
-              </router-link>
             </el-menu-item>
-          </el-sub-menu>
-          <!-- <el-sub-menu index="5">
+        </el-sub-menu>
+        <!-- <el-sub-menu index="Heartbeat Test">
             <template #title>
-              <el-icon><i-ep-phone /></el-icon>
-              <span>Heartbeat test</span>
+                <el-icon><i-ep-phone /></el-icon>
+                <span>Heartbeat test</span>
             </template>
             <el-menu-item>
-              <el-icon><i-ep-setting /></el-icon>
-              <span>Configure</span>
+                <el-icon><i-ep-setting /></el-icon>
+                <span>Configure</span>
             </el-menu-item>
-          </el-sub-menu> -->
-        </el-menu>
+        </el-sub-menu> -->
+    </el-menu>
 </template>
+
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goto = name => {
+    router.push({ name })
+}
+</script>

@@ -38,9 +38,9 @@ const get = async (timerange, keyword, offset, limit) => {
             order: [['createdAt', 'DESC']]
         }),
         count: await ApiLog.count({
-            where,
+            where
         })
-    } 
+    }
 }
 
 module.exports = {

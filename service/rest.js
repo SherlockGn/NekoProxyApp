@@ -3,7 +3,12 @@ const { Router, json } = require('express')
 const { port, enableCORS } = require('../config.json')
 const { Model } = require('../db/model')
 const { Rest } = require('../db/rest')
-const { queryData, createData, updateData, deleteData } = require('./datacenter')
+const {
+    queryData,
+    createData,
+    updateData,
+    deleteData
+} = require('./datacenter')
 
 const router = Router()
 
@@ -29,12 +34,14 @@ const checkPermission = async (req, res, type) => {
     }
     req.context.rest.db = db
     req.context.rest.model = model
-    const rest = (await Rest.findOne({
-        where: {
-            modelId: mod.id,
-            token
-        }
-    }))?.dataValues
+    const rest = (
+        await Rest.findOne({
+            where: {
+                modelId: mod.id,
+                token
+            }
+        })
+    )?.dataValues
     if (!rest || !rest[type]) {
         res.sendStatus(403)
         return null
@@ -58,7 +65,7 @@ router.all('/api/datacenter/:db/:model/:suffix?', async (req, res, next) => {
 
     try {
         let rest = null
-    
+
         if (req.method === 'GET' && req.params.suffix === undefined) {
             // query
             if ((rest = await checkPermission(req, res, 'query')) === null) {
@@ -67,10 +74,12 @@ router.all('/api/datacenter/:db/:model/:suffix?', async (req, res, next) => {
             res.json(await queryData(rest.modelId, req.query))
             return
         }
-    
+
         if (req.method === 'GET' && req.params.suffix !== undefined) {
             // query by pk
-            if ((rest = await checkPermission(req, res, 'queryByPk')) === null) {
+            if (
+                (rest = await checkPermission(req, res, 'queryByPk')) === null
+            ) {
                 return
             }
             const queried = await queryData(rest.modelId, {
@@ -83,17 +92,20 @@ router.all('/api/datacenter/:db/:model/:suffix?', async (req, res, next) => {
             }
             return
         }
-    
+
         if (req.method === 'POST' && req.params.suffix === '$query') {
             // advanced query
-            if ((rest = await checkPermission(req, res, 'advancedQuery')) === null) {
+            if (
+                (rest = await checkPermission(req, res, 'advancedQuery')) ===
+                null
+            ) {
                 return
             }
             const { where, offset, limit, order } = req.body
             res.json(await queryData(rest.modelId, where, offset, limit, order))
             return
         }
-    
+
         if (req.method === 'POST' && req.params.suffix === undefined) {
             // create
             if ((rest = await checkPermission(req, res, 'create')) === null) {
@@ -102,7 +114,7 @@ router.all('/api/datacenter/:db/:model/:suffix?', async (req, res, next) => {
             res.json(await createData(rest.modelId, req.body))
             return
         }
-    
+
         if (req.method === 'PUT' && req.params.suffix === undefined) {
             // update
             if ((rest = await checkPermission(req, res, 'update')) === null) {
@@ -111,7 +123,7 @@ router.all('/api/datacenter/:db/:model/:suffix?', async (req, res, next) => {
             res.json(await updateData(rest.modelId, req.body))
             return
         }
-    
+
         if (req.method === 'DELETE' && req.params.suffix !== undefined) {
             // del
             if ((rest = await checkPermission(req, res, 'delete')) === null) {
@@ -120,10 +132,12 @@ router.all('/api/datacenter/:db/:model/:suffix?', async (req, res, next) => {
             res.json(await deleteData(rest.modelId, req.params.suffix))
             return
         }
-    
+
         if (req.method === 'DELETE' && req.params.suffix === undefined) {
             // bulk del
-            if ((rest = await checkPermission(req, res, 'bulkDelete')) === null) {
+            if (
+                (rest = await checkPermission(req, res, 'bulkDelete')) === null
+            ) {
                 return
             }
             res.json(await deleteData(rest.modelId, req.body))

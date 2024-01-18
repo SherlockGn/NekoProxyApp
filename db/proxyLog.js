@@ -47,5 +47,5 @@ const ProxyLog = connection.define('proxyLog', {
 })
 
 module.exports = {
-    ProxyLog,
+    ProxyLog
 }

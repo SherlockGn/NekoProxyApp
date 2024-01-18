@@ -9,7 +9,7 @@ const monitor = (req, res, next) => {
         start: new Date(),
         transaction: v4()
     }
-    
+
     next()
 
     res.on('close', () => {

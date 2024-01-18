@@ -9,9 +9,13 @@ export const loadExampleObject = (isCreate, properties, selected) => {
             if (['id', 'createdAt', 'updatedAt'].includes(p.name)) {
                 return
             }
-            const defaultValue = p.defaultValue === null ? null : JSON.parse(p.defaultValue)
+            const defaultValue =
+                p.defaultValue === null ? null : JSON.parse(p.defaultValue)
             if (defaultValue !== null) {
-                const isBuiltInDefault = typeof defaultValue === 'string' && defaultValue.startsWith('#DataTypes.') && defaultValue.endsWith('#')
+                const isBuiltInDefault =
+                    typeof defaultValue === 'string' &&
+                    defaultValue.startsWith('#DataTypes.') &&
+                    defaultValue.endsWith('#')
                 if (!isBuiltInDefault) {
                     data[p.name] = defaultValue
                     return

@@ -5,12 +5,12 @@ const { port, enableCORS } = require('../config.json')
 
 const router = Router()
 
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
     if (port !== req.socket.address().port) {
         next()
         return
     }
-    res.redirect("/nekoapp/public")
+    res.redirect('/nekoapp/public')
 })
 
 router.options('*', async (req, res, next) => {
