@@ -18,9 +18,9 @@
             style="margin-top: 10px"
             type="primary"
             @click="send"
-            size="small"
-            >Try it out</el-button
-        >
+            size="small">
+            Try it out
+        </el-button>
         <div style="margin-top: 20px" v-if="result !== null">
             <el-tag>{{ result.status }}</el-tag>
             <br />

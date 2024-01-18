@@ -1,5 +1,5 @@
 <template>
-    <div style="width:80%;">
+    <div style="width: 80%">
         <el-form :model="rule" label-width="180px">
             <el-form-item label="Rule name">
                 <el-input v-model="rule.name" />
@@ -19,13 +19,15 @@
             <el-form-item label="Content limit">
                 <el-input-number v-model="rule.limit.val" :min="1" />
                 &nbsp; &nbsp;
-                <el-select v-model="rule.limit.unit" placeholder="Select" size="default">
+                <el-select
+                    v-model="rule.limit.unit"
+                    placeholder="Select"
+                    size="default">
                     <el-option
                         v-for="item in ['KB', 'MB', 'GB', 'TB', 'PB']"
                         :key="item"
                         :label="item"
-                        :value="item"
-                    />
+                        :value="item" />
                 </el-select>
             </el-form-item>
             <el-form-item label="Timeout (ms)">
@@ -46,53 +48,97 @@
             <el-form-item>
                 <template #label>
                     <el-text>
-                        Filter <el-icon @click="showNotification(info.rule.filter)"><i-ep-info-filled /></el-icon>
+                        Filter
+                        <el-icon @click="showNotification(info.rule.filter)">
+                            <i-ep-info-filled />
+                        </el-icon>
                     </el-text>
                 </template>
-                <FuncEditor v-model="rule.filter" funcName="filter" :paramList="['req']" placeholder="    return true" />
+                <func-editor
+                    v-model="rule.filter"
+                    funcName="filter"
+                    :paramList="['req']"
+                    placeholder="    return true" />
             </el-form-item>
             <el-form-item label="">
                 <template #label>
                     <el-text>
-                        Forward path <el-icon @click="showNotification(info.rule.path)"><i-ep-info-filled /></el-icon>
+                        Forward path
+                        <el-icon @click="showNotification(info.rule.path)">
+                            <i-ep-info-filled />
+                        </el-icon>
                     </el-text>
                 </template>
-                <FuncEditor v-model="rule.path" funcName="path" :paramList="['req']" placeholder="    return req.originalUrl" />
+                <func-editor
+                    v-model="rule.path"
+                    funcName="path"
+                    :paramList="['req']"
+                    placeholder="    return req.originalUrl" />
             </el-form-item>
             <el-form-item>
                 <template #label>
                     <el-text>
-                        Request <el-icon @click="showNotification(info.rule.req)"><i-ep-info-filled /></el-icon>
+                        Request
+                        <el-icon @click="showNotification(info.rule.req)">
+                            <i-ep-info-filled />
+                        </el-icon>
                     </el-text>
                 </template>
-                <FuncEditor v-model="rule.req" funcName="req" :paramList="['req']" placeholder="    return req" />
+                <func-editor
+                    v-model="rule.req"
+                    funcName="req"
+                    :paramList="['req']"
+                    placeholder="    return req" />
             </el-form-item>
             <el-form-item label="Request body">
                 <template #label>
                     <el-text>
-                        Request body<el-icon @click="showNotification(info.rule.reqBody)"><i-ep-info-filled /></el-icon>
+                        Request body
+                        <el-icon @click="showNotification(info.rule.reqBody)">
+                            <i-ep-info-filled />
+                        </el-icon>
                     </el-text>
                 </template>
-                <FuncEditor v-model="rule.reqBody" funcName="reqBody" :paramList="['body']" placeholder="    return body" />
+                <func-editor
+                    v-model="rule.reqBody"
+                    funcName="reqBody"
+                    :paramList="['body']"
+                    placeholder="    return body" />
             </el-form-item>
             <el-form-item label="Response headers">
                 <template #label>
                     <el-text>
-                        Response headers<el-icon @click="showNotification(info.rule.resHeader)"><i-ep-info-filled /></el-icon>
+                        Response headers
+                        <el-icon @click="showNotification(info.rule.resHeader)">
+                            <i-ep-info-filled />
+                        </el-icon>
                     </el-text>
                 </template>
-                <FuncEditor v-model="rule.resHeader" funcName="resHeader" :paramList="['headers']" placeholder="    return headers" />
+                <func-editor
+                    v-model="rule.resHeader"
+                    funcName="resHeader"
+                    :paramList="['headers']"
+                    placeholder="    return headers" />
             </el-form-item>
             <el-form-item>
                 <template #label>
                     <el-text>
-                        Response body<el-icon @click="showNotification(info.rule.resBody)"><i-ep-info-filled /></el-icon>
+                        Response body
+                        <el-icon @click="showNotification(info.rule.resBody)">
+                            <i-ep-info-filled />
+                        </el-icon>
                     </el-text>
                 </template>
-                <FuncEditor v-model="rule.resBody" funcName="resBody" :paramList="['body']" placeholder="    return body" />
+                <func-editor
+                    v-model="rule.resBody"
+                    funcName="resBody"
+                    :paramList="['body']"
+                    placeholder="    return body" />
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="createOrUpdate">{{ ruleId === undefined ? 'Create': 'Update' }}</el-button>
+                <el-button type="primary" @click="createOrUpdate">
+                    {{ ruleId === undefined ? 'Create' : 'Update' }}
+                </el-button>
                 <el-button @click="cancel">Cancel</el-button>
             </el-form-item>
         </el-form>
@@ -100,7 +146,6 @@
 </template>
 
 <script setup>
-
 import { useRoute, useRouter } from 'vue-router'
 import { rpc } from '../utils/rpc'
 import { info } from '../utils/info'
@@ -113,11 +158,15 @@ const ruleId = ref(route.query.ruleId)
 
 onMounted(async () => {
     if (ruleId.value !== undefined) {
-        const rul = (await rpc.rule.get({
-            id: ruleId.value
-        }))[0]
-        
-        const limit = rul.limit.replace(/(\d)([a-zA-Z])/g, '$1 $2').toUpperCase()
+        const rul = (
+            await rpc.rule.get({
+                id: ruleId.value
+            })
+        )[0]
+
+        const limit = rul.limit
+            .replace(/(\d)([a-zA-Z])/g, '$1 $2')
+            .toUpperCase()
         rule.value = {
             ...rul,
             timeout: rul.timeout === null ? 0 : rul.timeout,
@@ -130,26 +179,26 @@ onMounted(async () => {
 })
 
 const rule = ref({
-    "name": "My Proxy Rule",
-    "description": "",
-    "enabled": true,
-    "port": 3334,
-    "host": "localhost:3000",
-    "filter": "    return true",
-    "path": "    return req.originalUrl",
-    "req": "    return req",
-    "reqBody": "    return body",
-    "resBody": "    return body",
-    "resHeader": "    return headers",
-    "limit": {
+    'name': 'My Proxy Rule',
+    'description': '',
+    'enabled': true,
+    'port': 3334,
+    'host': 'localhost:3000',
+    'filter': '    return true',
+    'path': '    return req.originalUrl',
+    'req': '    return req',
+    'reqBody': '    return body',
+    'resBody': '    return body',
+    'resHeader': '    return headers',
+    'limit': {
         val: 1,
         unit: 'MB'
     },
-    "parseReqBody": true,
-    "reqAsBuffer": true,
-    "timeout": 0,
-    "memoizeHost": false,
-    "https": false
+    'parseReqBody': true,
+    'reqAsBuffer': true,
+    'timeout': 0,
+    'memoizeHost': false,
+    'https': false
 })
 
 const createOrUpdate = async () => {
@@ -176,20 +225,18 @@ const cancel = () => {
     })
 }
 
-const showNotification = (message) => {
+const showNotification = message => {
     ElNotification({
-    title: 'Hint',
-    message,
-    type: 'info',
-    dangerouslyUseHTMLString: true,
-    duration: 0
-  })
+        title: 'Hint',
+        message,
+        type: 'info',
+        dangerouslyUseHTMLString: true,
+        duration: 0
+    })
 }
-
 </script>
 
 <style scoped>
-
 .el-notification {
     --el-notification-width: 1000px !important;
 }
@@ -197,5 +244,4 @@ const showNotification = (message) => {
 .el-icon {
     margin-left: 5px;
 }
-
 </style>

@@ -2,16 +2,16 @@
     <div>
         <div style="margin-bottom: 30px">
             <el-row>
-                <el-text v-show="list.length === 0"
-                    >Currently there're no defined proxy rules.&nbsp;</el-text
-                >
-                <el-link type="success" :underline="false" @click="create"
-                    >Create</el-link
-                >
+                <el-text v-show="list.length === 0">
+                    Currently there're no defined proxy rules.&nbsp;
+                </el-text>
+                <el-link type="success" :underline="false" @click="create">
+                    Create
+                </el-link>
                 <el-text>&nbsp;a new rule. Or&nbsp;</el-text>
-                <el-link type="primary" :underline="false" @click="refresh"
-                    >refresh</el-link
-                >
+                <el-link type="primary" :underline="false" @click="refresh">
+                    refresh
+                </el-link>
                 <el-text>&nbsp;the list.</el-text>
             </el-row>
         </div>
@@ -35,31 +35,31 @@
                                     <el-link
                                         type="primary"
                                         :underline="false"
-                                        @click="update(element)"
-                                        >Update</el-link
-                                    >
+                                        @click="update(element)">
+                                        Update
+                                    </el-link>
                                     <el-text>&nbsp;or&nbsp;</el-text>
                                     <el-link
                                         type="danger"
                                         :underline="false"
-                                        @click="del(element)"
-                                        >delete</el-link
-                                    >
+                                        @click="del(element)">
+                                        delete
+                                    </el-link>
                                     <el-text>&nbsp;this rule.</el-text>
                                 </el-row>
                             </template>
-                            <el-descriptions-item label="Port">{{
-                                element.port
-                            }}</el-descriptions-item>
-                            <el-descriptions-item label="Created at">{{
-                                displayTimestamp(element.createdAt)
-                            }}</el-descriptions-item>
-                            <el-descriptions-item label="Updated at">{{
-                                displayTimestamp(element.updatedAt)
-                            }}</el-descriptions-item>
-                            <el-descriptions-item label="Limit">{{
-                                displayLimit(element.limit)
-                            }}</el-descriptions-item>
+                            <el-descriptions-item label="Port">
+                                {{ element.port }}
+                            </el-descriptions-item>
+                            <el-descriptions-item label="Created at">
+                                {{ displayTimestamp(element.createdAt) }}
+                            </el-descriptions-item>
+                            <el-descriptions-item label="Updated at">
+                                {{ displayTimestamp(element.updatedAt) }}
+                            </el-descriptions-item>
+                            <el-descriptions-item label="Limit">
+                                {{ displayLimit(element.limit) }}
+                            </el-descriptions-item>
                             <el-descriptions-item label="Parse as body">
                                 <el-tag
                                     size="small"
@@ -67,9 +67,9 @@
                                         element.parseReqBody
                                             ? 'success'
                                             : 'danger'
-                                    "
-                                    >{{ element.parseReqBody }}</el-tag
-                                >
+                                    ">
+                                    {{ element.parseReqBody }}
+                                </el-tag>
                             </el-descriptions-item>
                             <el-descriptions-item label="Request as buffer">
                                 <el-tag
@@ -78,20 +78,20 @@
                                         element.reqAsBuffer
                                             ? 'success'
                                             : 'danger'
-                                    "
-                                    >{{ element.reqAsBuffer }}</el-tag
-                                >
+                                    ">
+                                    {{ element.reqAsBuffer }}
+                                </el-tag>
                             </el-descriptions-item>
                             <el-descriptions-item label="Timeout">
                                 <el-tag
                                     v-if="element.timeout === null"
                                     size="small"
-                                    type="info"
-                                    >not specified</el-tag
-                                >
-                                <el-text v-if="element.timeout !== null">{{
-                                    element.timeout
-                                }}</el-text>
+                                    type="info">
+                                    not specified
+                                </el-tag>
+                                <el-text v-if="element.timeout !== null">
+                                    {{ element.timeout }}
+                                </el-text>
                             </el-descriptions-item>
                             <el-descriptions-item label="Memoize host">
                                 <el-tag
@@ -100,16 +100,18 @@
                                         element.memoizeHost
                                             ? 'success'
                                             : 'danger'
-                                    "
-                                    >{{ element.memoizeHost }}</el-tag
-                                >
+                                    ">
+                                    {{ element.memoizeHost }}
+                                </el-tag>
                             </el-descriptions-item>
                             <el-descriptions-item label="Enforce HTTPS">
                                 <el-tag
                                     size="small"
-                                    :type="element.https ? 'success' : 'danger'"
-                                    >{{ element.https }}</el-tag
-                                >
+                                    :type="
+                                        element.https ? 'success' : 'danger'
+                                    ">
+                                    {{ element.https }}
+                                </el-tag>
                             </el-descriptions-item>
                         </el-descriptions>
                     </div>

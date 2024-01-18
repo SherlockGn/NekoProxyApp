@@ -2,16 +2,16 @@
     <div style="min-width: 50%">
         <div style="margin-bottom: 30px">
             <el-row>
-                <el-text v-show="list.length === 0"
-                    >Currently there're no defined databases.&nbsp;</el-text
-                >
-                <el-link type="success" :underline="false" @click="create"
-                    >Create</el-link
-                >
+                <el-text v-show="list.length === 0">
+                    Currently there're no defined databases.&nbsp;
+                </el-text>
+                <el-link type="success" :underline="false" @click="create">
+                    Create
+                </el-link>
                 <el-text>&nbsp;a new database. Or&nbsp;</el-text>
-                <el-link type="primary" :underline="false" @click="refresh"
-                    >refresh</el-link
-                >
+                <el-link type="primary" :underline="false" @click="refresh">
+                    refresh
+                </el-link>
                 <el-text>&nbsp;the list.</el-text>
             </el-row>
         </div>
@@ -29,28 +29,28 @@
                         <el-link
                             type="primary"
                             :underline="false"
-                            @click="config(element)"
-                            >Configure</el-link
-                        >
+                            @click="config(element)">
+                            Configure
+                        </el-link>
                         <el-text>&nbsp;or&nbsp;</el-text>
                         <el-link
                             type="danger"
                             :underline="false"
-                            @click="del(element)"
-                            >delete</el-link
-                        >
+                            @click="del(element)">
+                            delete
+                        </el-link>
                         <el-text>&nbsp;this database.</el-text>
                     </el-row>
                 </template>
-                <el-descriptions-item label="Size"
-                    >{{ element.size }} bytes</el-descriptions-item
-                >
-                <el-descriptions-item label="Created at">{{
-                    displayTimestamp(element.createdAt)
-                }}</el-descriptions-item>
-                <el-descriptions-item label="Updated at">{{
-                    displayTimestamp(element.updatedAt)
-                }}</el-descriptions-item>
+                <el-descriptions-item label="Size">
+                    {{ element.size }} bytes
+                </el-descriptions-item>
+                <el-descriptions-item label="Created at">
+                    {{ displayTimestamp(element.createdAt) }}
+                </el-descriptions-item>
+                <el-descriptions-item label="Updated at">
+                    {{ displayTimestamp(element.updatedAt) }}
+                </el-descriptions-item>
             </el-descriptions>
         </div>
     </div>

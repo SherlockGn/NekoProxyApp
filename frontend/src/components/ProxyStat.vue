@@ -2,21 +2,15 @@
     <div style="width: 100%">
         <el-form label-width="150px">
             <el-form-item label="Time range">
-                <el-date-picker
-                    v-model="timerange"
-                    type="datetimerange"
-                    :shortcuts="shortcuts"
-                    range-separator="To"
-                    start-placeholder="Start date"
-                    end-placeholder="End date" />
+                <date-picker v-model="timerange" />
             </el-form-item>
             <el-form-item>
                 <template #label>
                     <el-text>
-                        Advanced filter<el-icon
-                            @click="showNotification(info.stat.filter)"
-                            ><i-ep-info-filled
-                        /></el-icon>
+                        Advanced filter
+                        <el-icon @click="showNotification(info.stat.filter)">
+                            <i-ep-info-filled />
+                        </el-icon>
                     </el-text>
                 </template>
                 <func-editor
@@ -89,9 +83,9 @@
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="stat"
-                    >Get statistics</el-button
-                >
+                <el-button type="primary" @click="stat">
+                    Get statistics
+                </el-button>
             </el-form-item>
         </el-form>
 
@@ -124,57 +118,6 @@ const height = computed(() => {
 })
 
 const timerange = ref(null)
-const shortcuts = ref([
-    {
-        text: 'Last 5 mins',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 60 * 5), d]
-        }
-    },
-    {
-        text: 'Last 15 mins',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 60 * 15), d]
-        }
-    },
-    {
-        text: 'Last 1 hour',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 3600), d]
-        }
-    },
-    {
-        text: 'Last 24 hours',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 3600 * 24), d]
-        }
-    },
-    {
-        text: 'Last 7 days',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 3600 * 24 * 7), d]
-        }
-    },
-    {
-        text: 'Last 30 days',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 3600 * 24 * 30), d]
-        }
-    },
-    {
-        text: 'Last 365 days',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 3600 * 24 * 365), d]
-        }
-    }
-])
 
 const chartEl = ref(null)
 let chart = null

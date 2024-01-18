@@ -10,32 +10,32 @@
         </el-page-header>
         <div style="margin-bottom: 10px">
             <el-row>
-                <el-link type="primary" :underline="false" @click="refresh"
-                    >Refresh</el-link
-                >
+                <el-link type="primary" :underline="false" @click="refresh">
+                    Refresh
+                </el-link>
                 <el-text>&nbsp;the list.&nbsp;</el-text>
-                <el-link type="success" :underline="false" @click="create"
-                    >Create</el-link
-                >
+                <el-link type="success" :underline="false" @click="create">
+                    Create
+                </el-link>
                 <el-text>&nbsp;a new model instance.&nbsp;</el-text>
                 <el-link
                     v-show="selected != null"
                     type="primary"
                     :underline="false"
-                    @click="update"
-                    >Update</el-link
-                >
+                    @click="update">
+                    Update
+                </el-link>
                 <el-text v-show="selected != null">&nbsp;or&nbsp;</el-text>
                 <el-link
                     v-show="selected != null"
                     type="danger"
                     :underline="false"
-                    @click="del"
-                    >delete</el-link
-                >
-                <el-text v-show="selected != null"
-                    >&nbsp;the selected item.</el-text
-                >
+                    @click="del">
+                    delete
+                </el-link>
+                <el-text v-show="selected != null">
+                    &nbsp;the selected item.
+                </el-text>
             </el-row>
         </div>
         <div style="margin-bottom: 30px">
@@ -61,9 +61,9 @@
                             v-else-if="
                                 pro.type === 'DATE' || pro.type === 'DATEONLY'
                             ">
-                            <el-tag size="small" type="warning">{{
-                                scope.row[pro.name]
-                            }}</el-tag>
+                            <el-tag size="small" type="warning">
+                                {{ scope.row[pro.name] }}
+                            </el-tag>
                         </template>
                         <template v-else>
                             <el-text>{{ scope.row[pro.name] }}</el-text>

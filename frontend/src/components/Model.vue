@@ -9,16 +9,16 @@
         </el-page-header>
         <div style="margin-bottom: 30px">
             <el-row>
-                <el-text v-show="list.length === 0"
-                    >Currently there're no defined models.&nbsp;</el-text
-                >
-                <el-link type="success" :underline="false" @click="create"
-                    >Create</el-link
-                >
+                <el-text v-show="list.length === 0">
+                    Currently there're no defined models.&nbsp;
+                </el-text>
+                <el-link type="success" :underline="false" @click="create">
+                    Create
+                </el-link>
                 <el-text>&nbsp;a new model. Or&nbsp;</el-text>
-                <el-link type="primary" :underline="false" @click="refresh"
-                    >refresh</el-link
-                >
+                <el-link type="primary" :underline="false" @click="refresh">
+                    refresh
+                </el-link>
                 <el-text>&nbsp;the list.</el-text>
             </el-row>
         </div>
@@ -36,41 +36,41 @@
                         <el-link
                             type="primary"
                             :underline="false"
-                            @click="config(element)"
-                            >Configure</el-link
-                        >
+                            @click="config(element)">
+                            Configure
+                        </el-link>
                         <el-text>&nbsp;or&nbsp;</el-text>
                         <el-link
                             type="danger"
                             :underline="false"
-                            @click="del(element)"
-                            >delete</el-link
-                        >
-                        <el-text
-                            >&nbsp;this model.&nbsp;Explore the&nbsp;</el-text
-                        >
+                            @click="del(element)">
+                            delete
+                        </el-link>
+                        <el-text>
+                            &nbsp;this model.&nbsp;Explore the&nbsp;
+                        </el-text>
                         <el-link
                             type="primary"
                             :underline="false"
-                            @click="gotoData(element)"
-                            >data</el-link
-                        >
+                            @click="gotoData(element)">
+                            data
+                        </el-link>
                         <el-text>&nbsp;and&nbsp;</el-text>
                         <el-link
                             type="primary"
                             :underline="false"
-                            @click="gotoApi(element)"
-                            >APIs</el-link
-                        >
+                            @click="gotoApi(element)">
+                            APIs
+                        </el-link>
                         <el-text>.</el-text>
                     </el-row>
                 </template>
-                <el-descriptions-item label="Created at">{{
-                    displayTimestamp(element.createdAt)
-                }}</el-descriptions-item>
-                <el-descriptions-item label="Updated at">{{
-                    displayTimestamp(element.updatedAt)
-                }}</el-descriptions-item>
+                <el-descriptions-item label="Created at">
+                    {{ displayTimestamp(element.createdAt) }}
+                </el-descriptions-item>
+                <el-descriptions-item label="Updated at">
+                    {{ displayTimestamp(element.updatedAt) }}
+                </el-descriptions-item>
             </el-descriptions>
         </div>
     </div>

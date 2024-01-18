@@ -2,13 +2,7 @@
     <div style="width: 100%">
         <el-form label-width="100px">
             <el-form-item label="Time range">
-                <el-date-picker
-                    v-model="timerange"
-                    type="datetimerange"
-                    :shortcuts="shortcuts"
-                    range-separator="To"
-                    start-placeholder="Start date"
-                    end-placeholder="End date" />
+                <date-picker v-model="timerange" />
             </el-form-item>
             <el-form-item label="Keyword">
                 <el-input v-model="keyword" />
@@ -59,57 +53,6 @@ const pageSize = ref(50)
 const total = ref(0)
 
 const timerange = ref(null)
-const shortcuts = ref([
-    {
-        text: 'Last 5 mins',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 60 * 5), d]
-        }
-    },
-    {
-        text: 'Last 15 mins',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 60 * 15), d]
-        }
-    },
-    {
-        text: 'Last 1 hour',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 3600), d]
-        }
-    },
-    {
-        text: 'Last 24 hours',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 3600 * 24), d]
-        }
-    },
-    {
-        text: 'Last 7 days',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 3600 * 24 * 7), d]
-        }
-    },
-    {
-        text: 'Last 30 days',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 3600 * 24 * 30), d]
-        }
-    },
-    {
-        text: 'Last 365 days',
-        value: () => {
-            const d = new Date()
-            return [new Date(d.getTime() - 1000 * 3600 * 24 * 365), d]
-        }
-    }
-])
 
 onMounted(async () => {
     await toastAction(async () => {

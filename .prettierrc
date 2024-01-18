@@ -8,7 +8,7 @@
     "quoteProps": "preserve",
     "trailingComma": "none",
     "singleAttributePerLine": false,
-    "htmlWhitespaceSensitivity": "css",
+    "htmlWhitespaceSensitivity": "ignore",
     "vueIndentScriptAndStyle": false,
     "proseWrap": "never",
     "insertPragma": false,

@@ -13,10 +13,10 @@
             <el-form-item label="Branch">
                 <template #label>
                     <el-text>
-                        Branch<el-icon
-                            @click="showNotification(info.project.branch)"
-                            ><i-ep-info-filled
-                        /></el-icon>
+                        Branch
+                        <el-icon @click="showNotification(info.project.branch)">
+                            <i-ep-info-filled />
+                        </el-icon>
                     </el-text>
                 </template>
                 <el-input v-model="project.branch" :disabled="!isCreate" />
@@ -24,10 +24,10 @@
             <el-form-item label="Type">
                 <template #label>
                     <el-text>
-                        Type<el-icon
-                            @click="showNotification(info.project.type)"
-                            ><i-ep-info-filled
-                        /></el-icon>
+                        Type
+                        <el-icon @click="showNotification(info.project.type)">
+                            <i-ep-info-filled />
+                        </el-icon>
                     </el-text>
                 </template>
                 <el-select
@@ -57,15 +57,15 @@
                 <el-button
                     type="primary"
                     :disabled="isLoading"
-                    @click="createOrUpdate"
-                    >{{ isCreate ? 'Create' : 'Update' }}</el-button
-                >
+                    @click="createOrUpdate">
+                    {{ isCreate ? 'Create' : 'Update' }}
+                </el-button>
                 <el-button @click="cancel">Cancel</el-button>
             </el-form-item>
             <el-form-item>
-                <el-icon class="is-loading" v-show="isLoading"
-                    ><i-ep-loading
-                /></el-icon>
+                <el-icon class="is-loading" v-show="isLoading">
+                    <i-ep-loading />
+                </el-icon>
             </el-form-item>
         </el-form>
     </div>

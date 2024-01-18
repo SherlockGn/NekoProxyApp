@@ -40,18 +40,19 @@
             <el-form-item label="Validate">
                 <template #label>
                     <el-text>
-                        Validate<el-icon
-                            @click="showNotification(info.property.validate)"
-                            ><i-ep-info-filled
-                        /></el-icon>
+                        Validate
+                        <el-icon
+                            @click="showNotification(info.property.validate)">
+                            <i-ep-info-filled />
+                        </el-icon>
                     </el-text>
                 </template>
-                <FuncEditor v-model="property.validate" :showHeader="false" />
+                <func-editor v-model="property.validate" :showHeader="false" />
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="createOrUpdate">{{
-                    isCreate ? 'Create' : 'Update'
-                }}</el-button>
+                <el-button type="primary" @click="createOrUpdate">
+                    {{ isCreate ? 'Create' : 'Update' }}
+                </el-button>
                 <el-button @click="cancel">Cancel</el-button>
             </el-form-item>
         </el-form>
