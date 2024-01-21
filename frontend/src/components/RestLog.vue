@@ -1,96 +1,58 @@
 <template>
-    <div style="width: 100%">
-        <el-form label-width="100px">
-            <el-form-item label="Time range">
-                <date-picker v-model="timerange" />
-            </el-form-item>
-            <el-form-item label="Keyword">
-                <el-input v-model="keyword" />
-            </el-form-item>
-        </el-form>
-
-        <el-table :data="data" style="width: 100%" :height="height">
-            <el-table-column prop="createdAt" label="Date" width="200px" />
-            <el-table-column
-                prop="transaction"
-                label="Transaction ID"
-                width="350px" />
-            <el-table-column prop="status" label="Status code" width="130px" />
-            <el-table-column prop="db" label="Database" width="130px" />
-            <el-table-column prop="model" label="Model" width="130px" />
-            <el-table-column prop="type" label="API type" width="130px" />
-            <el-table-column
-                prop="reqLength"
-                label="Request length"
-                width="130px" />
-            <el-table-column
-                prop="resLength"
-                label="Response length"
-                width="140px" />
-            <el-table-column prop="duration" label="Duration" width="130px" />
-        </el-table>
-
-        <el-pagination
-            style="margin-top: 20px"
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="pageSize"
-            :current-page="page"
-            @update:current-page="e => (page = e)"
-            @change="getData" />
-    </div>
+    <Log :col="col" :get="get" :clear="clear" />
 </template>
 
 <script setup>
-import JsonViewer from 'vue-json-viewer'
-
-import { rpc } from '../utils/rpc'
-import { toastAction } from '../utils/toastAction'
-
-const keyword = ref('')
-const data = ref([])
-const page = ref(1)
-const pageSize = ref(50)
-const total = ref(0)
-
-const timerange = ref(null)
-
-onMounted(async () => {
-    await toastAction(async () => {
-        await getData()
-    }, 'get data center RESTful API logs')
-})
-
-const height = computed(() => {
-    return window.innerHeight - 320
-})
-
-const getData = async () => {
-    const res = await rpc.restlog.get(
-        timerange.value,
-        keyword.value,
-        (page.value - 1) * pageSize.value,
-        pageSize.value
-    )
-    res.data.forEach(item => {
-        item.createdAt = new Date(item.createdAt).toLocaleString()
-    })
-    data.value = res.data
-    total.value = res.count
-}
-
-const debounce = (fn, delay) => {
-    let timer = null
-    return (...args) => {
-        if (timer) {
-            clearTimeout(timer)
-        }
-        timer = setTimeout(() => {
-            fn.apply(this, args)
-        }, delay)
+const col = [
+    {
+        label: 'Date',
+        prop: 'createdAt',
+        type: ['date'],
+        width: '200px'
+    },
+    {
+        label: 'Transaction',
+        prop: 'transaction',
+        width: '330px'
+    },
+    {
+        label: 'Status code',
+        prop: 'status',
+        width: '130px'
+    },
+    {
+        label: 'Database',
+        prop: 'db',
+        width: '130px'
+    },
+    {
+        label: 'Model',
+        prop: 'model',
+        width: '130px'
+    },
+    {
+        label: 'API type',
+        prop: 'type',
+        width: '130px'
+    },
+    {
+        label: 'Request length',
+        prop: 'reqLength',
+        width: '130px'
+    },
+    {
+        label: 'Response length',
+        prop: 'resLength',
+        width: '150px'
+    },
+    {
+        label: 'Duration',
+        prop: 'duration',
+        width: '100px'
     }
-}
+]
 
-watch(() => timerange.value, getData)
-watch(() => keyword.value, debounce(getData, 500))
+const get = ref(rpc.restlog.get)
+
+const clear = ref(rpc.restlog.clear)
 </script>

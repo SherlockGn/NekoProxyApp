@@ -3,12 +3,12 @@
         <div style="margin-bottom: 30px">
             <el-row>
                 <el-text v-show="list.length === 0">
-                    Currently there're no defined projects.&nbsp;
+                    Currently there're no defined scheduled jobs.&nbsp;
                 </el-text>
                 <el-link type="success" :underline="false" @click="create">
                     Create
                 </el-link>
-                <el-text>&nbsp;a new project. Or&nbsp;</el-text>
+                <el-text>&nbsp;a new job. Or&nbsp;</el-text>
                 <el-link type="primary" :underline="false" @click="refresh">
                     refresh
                 </el-link>
@@ -19,10 +19,7 @@
             style="margin-bottom: 30px"
             v-for="element in list"
             :key="element.name">
-            <el-descriptions
-                size="default"
-                border
-                style="margin-bottom: 10px">
+            <el-descriptions size="default" border style="margin-bottom: 10px">
                 <template #title>
                     {{ element.name }}&nbsp;
                     <el-text type="info">{{ element.description }}</el-text>
@@ -42,13 +39,6 @@
                             @click="update(element)">
                             update
                         </el-link>
-                        <el-text>,&nbsp;</el-text>
-                        <el-link
-                            type="primary"
-                            :underline="false"
-                            @click="sync(element)">
-                            sync
-                        </el-link>
                         <el-text>&nbsp;or&nbsp;</el-text>
                         <el-link
                             type="danger"
@@ -56,48 +46,27 @@
                             @click="del(element)">
                             delete
                         </el-link>
-                        <el-text>&nbsp;this project.</el-text>
+                        <el-text>&nbsp;this job.</el-text>
                     </el-row>
                 </template>
-                <el-descriptions-item label="Status">
-                    {{ element.status }}
-                </el-descriptions-item>
                 <el-descriptions-item label="Created at">
                     {{ displayTimestamp(element.createdAt) }}
                 </el-descriptions-item>
                 <el-descriptions-item label="Updated at">
                     {{ displayTimestamp(element.updatedAt) }}
                 </el-descriptions-item>
-                <el-descriptions-item label="Repo" :span="3">
-                    {{ element.repo }}
-                </el-descriptions-item>
-                <el-descriptions-item label="Type">
-                    {{ element.type }}
-                </el-descriptions-item>
-                <el-descriptions-item label="Branch">
+                <el-descriptions-item label="Enabled">
                     <el-tag
-                        v-if="element.branch === null"
                         size="small"
-                        type="info">
-                        not specified
+                        :type="element.enabled ? 'success' : 'danger'">
+                        {{ element.enabled }}
                     </el-tag>
-                    <el-text v-if="element.branch !== null">
-                        {{ element.branch }}
-                    </el-text>
                 </el-descriptions-item>
-                <el-descriptions-item
-                    v-if="element.script !== null"
-                    label="Script">
-                    {{ element.script }}
+                <el-descriptions-item label="Cron">
+                    {{ element.cron }}
                 </el-descriptions-item>
-                <el-descriptions-item v-if="element.port !== null" label="Port">
-                    {{ element.port }}
-                </el-descriptions-item>
-                <el-descriptions-item
-                    v-if="element.args !== null"
-                    label="Args"
-                    :span="3">
-                    {{ element.args }}
+                <el-descriptions-item label="Status">
+                    {{ element.status }}
                 </el-descriptions-item>
             </el-descriptions>
         </div>
@@ -117,42 +86,30 @@ onMounted(async () => {
     refresh()
 })
 
-const start = async el => {
-    await toastAction(async () => {
-        await rpc.project.start(el.id)
-        list.value = await rpc.project.get()
-    }, 'start project')
-}
-
 const refresh = async e => {
     await toastAction(async () => {
-        list.value = await rpc.project.get()
-    }, 'refresh project')
+        list.value = await rpc.job.get()
+    }, 'refresh job')
 }
 
 const create = async e => {
-    router.push({ name: 'NewProject' })
+    router.push({ name: 'NewJob' })
 }
 
 const update = async el => {
-    router.push({ name: 'NewProject', query: { id: el.id } })
+    router.push({ name: 'NewJob', query: { id: el.id } })
 }
 
-const sync = async el => {
+const start = async el => {
     await toastAction(async () => {
-        await rpc.project.pull(el.id)
-        list.value = await rpc.project.get()
-    }, 'sync project')
-}
-
-const config = el => {
-    router.push({ name: 'Model', query: { db: el.name } })
+        await rpc.job.start(el)
+    }, 'start job')
 }
 
 const del = async el => {
     try {
         await ElMessageBox.confirm(
-            'This project will be permanently deleted. Continue?',
+            'This job will be permanently deleted. Continue?',
             'Warning',
             {
                 confirmButtonText: 'OK',
@@ -161,9 +118,9 @@ const del = async el => {
             }
         )
         toastAction(async () => {
-            await rpc.project.del(el.id)
-            list.value = await rpc.project.get()
-        }, 'delete the project')
+            await rpc.job.del(el.id)
+            list.value = await rpc.job.get()
+        }, 'delete the job')
     } catch (e) {}
 }
 

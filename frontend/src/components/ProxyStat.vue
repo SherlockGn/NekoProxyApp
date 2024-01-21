@@ -83,7 +83,7 @@
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="stat">
+                <el-button type="primary" @click="getStat">
                     Get statistics
                 </el-button>
             </el-form-item>
@@ -136,7 +136,11 @@ const showNotification = message => {
     })
 }
 
-const stat = async e => {
+const getStat = async e => {
+    await toastAction(stat, 'analyze proxy stat')
+}
+
+const stat = async () => {
     let where = {}
     try {
         where = JSON5.parse(filter.value)

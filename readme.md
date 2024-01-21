@@ -6,13 +6,15 @@ Neko Proxy App is a powerful node-based application that provides a flexible and
 
 The Neko Proxy App primarily focuses on four main functions:
 
-1. Proxy Rule Configuration: The Neko Proxy App allows users to define proxy rules dynamically using JavaScript code, providing a high degree of flexibility. This feature enables users to configure proxy settings according to their specific requirements. Additionally, the application offers a powerful analyzer to analyze proxy records and logs efficiently.
+1. Proxy Rule Configuration: The Neko Proxy App allows users to define HTTP proxy rules dynamically using JavaScript code, providing a high degree of flexibility. This feature enables users to configure proxy settings according to their specific requirements. Additionally, the application offers a powerful analyzer to analyze proxy records and logs efficiently.
 
 2. System and API Log Viewing: With the Neko Proxy App, users can easily view system logs and API logs. This functionality provides valuable insights into the application's behavior, aiding in debugging and monitoring processes.
 
-3. Datacenter and Database Management: The Neko Proxy App incorporates a cloud-based database known as Datacenter. Users can define databases, models, and model properties using the web portal. The data stored in the database can be managed through the web portal or accessed via auto-generated APIs, offering a convenient and efficient means of data management.
+3. Datacenter and Database Management: The Neko Proxy App generates an easy-to-use ORM database known as Datacenter. Users can define databases, models, and model properties using the web portal. The data stored in the database can be managed through the web portal or accessed via auto-generated APIs, offering a convenient and efficient means of data management.
 
 4. CI/CD Tool: The Neko Proxy App serves as a reliable CI/CD (Continuous Integration/Continuous Deployment) tool. It allows users to effortlessly add static page projects or Node.js projects through the web portal. The application automatically creates and launches the projects, enabling users to manage the processes seamlessly.
+
+5. Scheduled jobs: The Neko Proxy App introduces the feature of scheduled jobs, allowing users to create automated tasks through simple JavaScript code. With the ability to specify cron expressions, users can determine when these jobs should run automatically. Through the web portal, users can easily define and manage scheduled jobs, enabling efficient execution of recurring tasks according to their desired schedule.
 
 ## Getting Started
 
@@ -51,7 +53,7 @@ cd neko-proxy-app
 node pm2start.js
 ```
 
-4. Open your preferred web browser and visit http://localhost:3334 to access the Neko Proxy App web portal.
+4. Open your preferred web browser and visit http://localhost:3334 to access the Neko Proxy App web portal. To start using the service, you can log in using the default user account "admin" with the password "admin".
 
 ## How to Contribute
 
@@ -61,7 +63,7 @@ We welcome contributions to the development and improvement of the Neko Proxy Ap
 
 To set up the development environment for the Neko Proxy App, follow these steps:
 
-1. Enable CORS for the backend: Go to the config.json file and set `enableCORS` to `true`.
+1. Enable CORS for the backend: Go to the config.json file and set `enableCORS` to `true` and the `required.required` to `false`.
 
 2. Install the backend:
 

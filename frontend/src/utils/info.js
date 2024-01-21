@@ -19,5 +19,18 @@ export const info = {
     project: {
         branch: 'The branch to deploy to. If not specified, the default branch will be used.',
         type: 'For the project type "static", CI/CD treats it as static web pages and deploys it as a static web server. For the project type "node server", CI/CD considers it as a Node.js server and runs "npm install" after initialization or synchronization.'
+    },
+    job: {
+        script: `You can easily create your job by writing JavaScript code in the "run" function. The "utils" parameter contains properties that make your script easier to work with. "require" is equivalent to Node.js require and is used to include third-party tools. "join" is used to combine file paths. "folder" is a string path where the "runtime/jobs/{name}" is located, which is a recommended location to save your file. "download" is a function that can be used with the syntax "async download(url, path)". "v4" is a function used to generate a v4 UUID, and you can simply call it as "v4()". The returned value or any errors thrown during the function call will be logged.<br>
+        Here is an example:<br>
+        <pre><code>const url = 'https://api.waifu.pics/sfw/waifu'
+const json = await (await fetch(url)).json()
+const { download, join, v4, folder } = utils
+await download(json.url,
+    join(folder, v4() + '.jpg'))
+return {
+    component: 'img',
+    src: json.url
+}</code></pre>`
     }
 }

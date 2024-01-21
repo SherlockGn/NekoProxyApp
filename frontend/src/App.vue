@@ -9,7 +9,7 @@
                 <Navbar />
             </el-col>
             <el-col :span="19" class="center padding">
-                <router-view />
+                <router-view v-if="alive" />
             </el-col>
         </el-row>
     </div>
@@ -27,4 +27,16 @@
 }
 </style>
 
-<script setup></script>
+<script setup>
+
+const alive = ref(true)
+const reload = () => {
+    alive.value = false
+    nextTick(() => {
+        alive.value = true
+    })
+}
+
+provide('reload', reload)
+
+</script>

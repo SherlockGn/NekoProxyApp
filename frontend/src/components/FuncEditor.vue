@@ -43,7 +43,9 @@ onMounted(() => {
 const emit = defineEmits(['update:modelValue'])
 
 const header = computed(() => {
-    return `const ${props.funcName} = (${props.paramList.join(', ')}) => {`
+    return `const async ${props.funcName} = (${props.paramList.join(
+        ', '
+    )}) => {`
 })
 
 const extensions = [javascript(), oneDark]

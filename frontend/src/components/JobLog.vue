@@ -16,30 +16,35 @@ const col = [
         width: '150px'
     },
     {
-        label: 'Command',
-        prop: 'command',
-        width: '130px'
+        label: 'Status',
+        prop: 'status',
+        width: '80px'
     },
     {
-        label: 'Triggered by',
-        prop: 'trigger',
-        width: '130px'
+        label: 'Transaction',
+        prop: 'transaction',
+        width: '330px'
     },
     {
         label: 'Output',
         prop: 'output',
-        type: ['json', 'text'],
+        type: ['media', 'json', 'text'],
         width: '290px'
     },
     {
         label: 'Error',
         prop: 'error',
-        type: ['json', 'text'],
+        type: ['media', 'json', 'text'],
         width: '290px'
+    },
+    {
+        label: 'Duration',
+        prop: 'duration',
+        width: '100px'
     }
 ]
 
-const get = ref(rpc.projectlog.get)
+const get = ref(rpc.joblog.get)
 
-const clear = ref(rpc.projectlog.clear)
+const clear = ref(rpc.joblog.clear)
 </script>

@@ -26,10 +26,15 @@
                 <template #item="{ element }">
                     <div style="margin-bottom: 30px">
                         <el-descriptions
-                            :title="element.name"
                             size="default"
                             border
                             style="margin-bottom: 10px">
+                            <template #title>
+                                {{ element.name }}&nbsp;
+                                <el-text type="info">
+                                    {{ element.description }}
+                                </el-text>
+                            </template>
                             <template #extra>
                                 <el-row>
                                     <el-link

@@ -4,7 +4,7 @@ const { Sequelize, Op } = require('sequelize')
 
 const { dialect, host, username, password } = require('../config.json').database
 
-const databaseName = 'gateway'
+const databaseName = 'app'
 
 let storage = undefined
 if (dialect === 'sqlite') {

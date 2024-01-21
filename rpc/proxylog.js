@@ -42,6 +42,10 @@ const get = async (timerange, keyword, offset, limit) => {
     }
 }
 
+const clear = async () => {
+    await ProxyLog.truncate()
+}
+
 const stat = async (
     timerange,
     customWhere,
@@ -112,5 +116,6 @@ const stat = async (
 
 module.exports = {
     get,
+    clear,
     stat
 }

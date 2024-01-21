@@ -6,5 +6,9 @@
         "username": null,
         "password": null
     },
+    "login": {
+        "required": true,
+        "expiresIn": "2h"
+    },
     "enableCORS": true
 }

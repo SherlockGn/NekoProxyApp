@@ -1,5 +1,15 @@
 <template>
     <el-menu style="height: calc(100vh - 150px)">
+        <el-sub-menu index="User">
+            <template #title>
+                <el-icon><i-ep-user /></el-icon>
+                <span>User</span>
+            </template>
+            <el-menu-item @click="goto('Login')" index="Login">
+                <el-icon><i-ep-credit-card /></el-icon>
+                <span>Login</span>
+            </el-menu-item>
+        </el-sub-menu>
         <el-sub-menu index="Proxy">
             <template #title>
                 <el-icon><i-ep-location /></el-icon>
@@ -64,16 +74,20 @@
                 <span>Project Log</span>
             </el-menu-item>
         </el-sub-menu>
-        <!-- <el-sub-menu index="Heartbeat Test">
+        <el-sub-menu index="CRON jobs">
             <template #title>
-                <el-icon><i-ep-phone /></el-icon>
-                <span>Heartbeat test</span>
+                <el-icon><i-ep-timer /></el-icon>
+                <span>Scheduled jobs</span>
             </template>
-            <el-menu-item>
-                <el-icon><i-ep-setting /></el-icon>
-                <span>Configure</span>
+            <el-menu-item @click="goto('Job')" index="Job">
+                <el-icon><i-ep-sunny /></el-icon>
+                <span>Job settings</span>
             </el-menu-item>
-        </el-sub-menu> -->
+            <el-menu-item @click="goto('JobLog')" index="JobLog">
+                <el-icon><i-ep-wallet /></el-icon>
+                <span>Job logs</span>
+            </el-menu-item>
+        </el-sub-menu>
     </el-menu>
 </template>
 

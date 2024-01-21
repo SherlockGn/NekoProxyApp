@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
+import Login from './components/Login.vue'
+
 import Rule from './components/Rule.vue'
 import NewRule from './components/NewRule.vue'
 import ProxyLog from './components/ProxyLog.vue'
@@ -20,10 +22,19 @@ import NewProject from './components/NewProject.vue'
 import ProjectLog from './components/ProjectLog.vue'
 import PM2 from './components/PM2.vue'
 
+import Job from './components/Job.vue'
+import NewJob from './components/NewJob.vue'
+import JobLog from './components/JobLog.vue'
+
 const routes = [
     {
         path: '/',
         redirect: '/rule'
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
     },
     {
         path: '/rule',
@@ -109,6 +120,21 @@ const routes = [
         path: '/pm2',
         name: 'PM2',
         component: PM2
+    },
+    {
+        path: '/job',
+        name: 'Job',
+        component: Job
+    },
+    {
+        path: '/newjob',
+        name: 'NewJob',
+        component: NewJob
+    },
+    {
+        path: '/joblog',
+        name: 'JobLog',
+        component: JobLog
     }
 ]
 

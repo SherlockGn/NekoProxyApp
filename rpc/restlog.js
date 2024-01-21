@@ -46,6 +46,11 @@ const get = async (timerange, keyword, offset, limit) => {
     }
 }
 
+const clear = async () => {
+    return await RestLog.truncate()
+}
+
 module.exports = {
-    get
+    get,
+    clear
 }

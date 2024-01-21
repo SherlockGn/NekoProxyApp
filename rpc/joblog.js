@@ -1,7 +1,7 @@
 const { Op } = require('sequelize')
 
 const { connection } = require('../db/database')
-const { ProjectLog } = require('../db/projectLog')
+const { JobLog } = require('../db/jobLog')
 
 const get = async (timerange, keyword, offset, limit) => {
     const where = {}
@@ -10,10 +10,10 @@ const get = async (timerange, keyword, offset, limit) => {
             name: { [Op.substring]: keyword }
         },
         {
-            command: { [Op.substring]: keyword }
+            status: { [Op.substring]: keyword }
         },
         {
-            trigger: { [Op.substring]: keyword }
+            transaction: { [Op.substring]: keyword }
         },
         {
             output: { [Op.substring]: keyword }
@@ -28,20 +28,20 @@ const get = async (timerange, keyword, offset, limit) => {
         }
     }
     return {
-        data: await ProjectLog.findAll({
+        data: await JobLog.findAll({
             where,
             offset,
             limit,
             order: [['createdAt', 'DESC']]
         }),
-        count: await ProjectLog.count({
+        count: await JobLog.count({
             where
         })
     }
 }
 
 const clear = async () => {
-    return await ProjectLog.truncate()
+    return await JobLog.truncate()
 }
 
 module.exports = {

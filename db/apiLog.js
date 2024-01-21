@@ -47,6 +47,14 @@ const ApiLog = connection.define('apiLog', {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: ''
+    },
+    user: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    authType: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 })
 

@@ -33,7 +33,9 @@ const monitor = (req, res, next) => {
                 reqLength,
                 resLength,
                 module: req.context.rpc.module,
-                func: req.context.rpc.func
+                func: req.context.rpc.func,
+                user: req.context.auth?.user?.name ?? null,
+                authType: req.context.auth?.type ?? null
             })
         } else if (req.context.rest) {
             RestLog.create({
