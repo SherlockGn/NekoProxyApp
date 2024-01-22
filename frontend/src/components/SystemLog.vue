@@ -7,6 +7,7 @@ const col = [
     {
         prop: 'createdAt',
         label: 'Date',
+        type: ['date'],
         width: '200px'
     },
     {

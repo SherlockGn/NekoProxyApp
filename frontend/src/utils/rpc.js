@@ -2,6 +2,7 @@ import { host } from './host'
 import { base64 } from './b64'
 
 import router from '../router'
+import fakeRpc from '../demo/fakeRpc'
 
 const invoke = async (module, func, args) => {
     const isLogin = module === 'user' && func === 'login' && args.length === 2
@@ -52,7 +53,7 @@ const invoke = async (module, func, args) => {
     }
 }
 
-export const rpc = new Proxy(
+const proxyPrc = new Proxy(
     {},
     {
         get: (target, module) => {
@@ -67,5 +68,7 @@ export const rpc = new Proxy(
         }
     }
 )
+
+export const rpc = demoMode ? fakeRpc : proxyPrc
 
 window.rpc = rpc

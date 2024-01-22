@@ -58,6 +58,7 @@ declare module 'vue' {
     IEpNotebook: typeof import('~icons/ep/notebook')['default']
     IEpPicture: typeof import('~icons/ep/picture')['default']
     IEpPromotion: typeof import('~icons/ep/promotion')['default']
+    IEpQuestionFilled: typeof import('~icons/ep/question-filled')['default']
     IEpReading: typeof import('~icons/ep/reading')['default']
     IEpSetting: typeof import('~icons/ep/setting')['default']
     IEpShoppingBag: typeof import('~icons/ep/shopping-bag')['default']

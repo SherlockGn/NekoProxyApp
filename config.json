@@ -10,5 +10,5 @@
         "required": true,
         "expiresIn": "2h"
     },
-    "enableCORS": true
+    "enableCORS": false
 }

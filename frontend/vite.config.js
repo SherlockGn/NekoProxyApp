@@ -9,9 +9,14 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Inspect from 'vite-plugin-inspect'
 
 const pathSrc = path.resolve(__dirname, 'src')
+const demoMode = false
+const base = !demoMode ? '/nekoapp/public' : '/NekoProxyApp'
 
 export default defineConfig({
-    base: 'nekoapp/public',
+    define: {
+        demoMode
+    },
+    base,
     resolve: {
         alias: {
             '@': pathSrc

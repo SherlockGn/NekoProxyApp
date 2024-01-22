@@ -32,5 +32,8 @@ return {
     component: 'img',
     src: json.url
 }</code></pre>`
+    },
+    demo: {
+        intro: `You are currently in the demo mode of the Neko Proxy App. This is a static hosted web page designed to provide you with an opportunity to explore and test the app's features and configuration options. It is important to note that none of your actions or operations will be recorded. Additionally, please be aware that any changes or modifications you make will be lost upon refreshing the browser.`
     }
 }
