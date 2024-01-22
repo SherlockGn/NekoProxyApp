@@ -2,6 +2,10 @@
 
 Neko Proxy App is a powerful node-based application that provides a flexible and customizable proxy server solution. It utilizes various technologies such as Express, express-http-proxy, Sequelize, PM2, Vue3, and element-plus to offer a comprehensive backend and frontend environment. This README.md file serves as a guide to understanding the features and functionalities of the Neko Proxy App.
 
+## Demo environment
+
+We have created a demo environment for the Neko Proxy App, allowing you to explore and test its features and configuration options. You can access the demo [here](https://nekogong.gitee.io/neko-proxy-app). Please note that the demo is a static hosted web page designed for demonstration purposes only. It provides a safe environment to familiarize yourself with the app's functionalities without affecting live data or making permanent changes. Any actions or modifications you make within the demo will not be recorded, and all changes will be reset upon refreshing the browser. 
+
 ## Features
 
 The Neko Proxy App primarily focuses on four main functions:
