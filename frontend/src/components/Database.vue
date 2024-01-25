@@ -1,123 +1,89 @@
 <template>
-    <div style="min-width: 50%">
-        <div style="margin-bottom: 30px">
-            <el-row>
-                <el-text v-show="list.length === 0">
-                    Currently there're no defined databases.&nbsp;
-                </el-text>
-                <el-link type="success" :underline="false" @click="create">
-                    Create
-                </el-link>
-                <el-text>&nbsp;a new database. Or&nbsp;</el-text>
-                <el-link type="primary" :underline="false" @click="refresh">
-                    refresh
-                </el-link>
-                <el-text>&nbsp;the list.</el-text>
-            </el-row>
-        </div>
-        <div
-            style="margin-bottom: 30px"
-            v-for="element in list"
-            :key="element.name">
-            <el-descriptions
-                :title="element.name"
-                size="default"
-                border
-                style="margin-bottom: 10px">
-                <template #extra>
-                    <el-row>
-                        <el-link
-                            type="primary"
-                            :underline="false"
-                            @click="config(element)">
-                            Configure
-                        </el-link>
-                        <el-text>&nbsp;or&nbsp;</el-text>
-                        <el-link
-                            type="danger"
-                            :underline="false"
-                            @click="del(element)">
-                            delete
-                        </el-link>
-                        <el-text>&nbsp;this database.</el-text>
-                    </el-row>
-                </template>
-                <el-descriptions-item label="Size">
-                    {{ element.size }} bytes
-                </el-descriptions-item>
-                <el-descriptions-item label="Created at">
-                    {{ displayTimestamp(element.createdAt) }}
-                </el-descriptions-item>
-                <el-descriptions-item label="Updated at">
-                    {{ displayTimestamp(element.updatedAt) }}
-                </el-descriptions-item>
-            </el-descriptions>
-        </div>
-    </div>
+    <Display :config="config" />
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
 import { rpc } from '../utils/rpc'
-import { toastAction } from '../utils/toastAction'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const list = ref([])
-
-onMounted(async () => {
-    refresh()
+const config = ref({
+    actions: {
+        get: {
+            func: rpc.db.get,
+            description: 'refresh databases'
+        },
+        add: {
+            func: async name => await rpc.db.add(name),
+            getNameByDialog: true,
+            description: 'create database',
+            refreshRequired: true
+        },
+        del: {
+            func: async el => await rpc.db.del(el.name),
+            description: 'delete database',
+            confirm: true,
+            refreshRequired: true
+        },
+        config: {
+            func: el => router.push({ name: 'Model', query: { db: el.name } })
+        }
+    },
+    titles: [
+        {
+            val: "Currently there're no defined databases. ",
+            displayIfEmpty: true
+        },
+        {
+            val: 'Create',
+            type: 'success',
+            action: 'add'
+        },
+        {
+            val: ' a new database. Or '
+        },
+        {
+            val: 'refresh',
+            type: 'primary',
+            action: 'get'
+        },
+        {
+            val: ' the list.'
+        }
+    ],
+    header: el => ({ name: el.name }),
+    extraText: [
+        {
+            val: 'Configure',
+            type: 'primary',
+            action: 'config'
+        },
+        {
+            val: ' or '
+        },
+        {
+            val: 'delete',
+            type: 'danger',
+            action: 'del'
+        },
+        {
+            val: ' this database.'
+        }
+    ],
+    props: [
+        {
+            label: 'Size',
+            prop: 'size'
+        },
+        {
+            label: 'Created at',
+            prop: 'createdAt'
+        },
+        {
+            label: 'Updated at',
+            prop: 'updatedAt'
+        }
+    ]
 })
-
-const refresh = async e => {
-    await toastAction(async () => {
-        list.value = await rpc.db.get()
-    }, 'refresh databases')
-}
-
-const create = async e => {
-    let name = null
-    try {
-        name = await ElMessageBox.prompt(
-            'Please input the database name',
-            'Create database',
-            {
-                confirmButtonText: 'OK',
-                cancelButtonText: 'Cancel'
-            }
-        )
-    } catch {
-        return
-    }
-    toastAction(async () => {
-        await rpc.db.add(name.value)
-        await refresh()
-    }, 'create database')
-}
-
-const config = el => {
-    router.push({ name: 'Model', query: { db: el.name } })
-}
-
-const del = async el => {
-    try {
-        await ElMessageBox.confirm(
-            'This database will be permanently deleted. Continue?',
-            'Warning',
-            {
-                confirmButtonText: 'OK',
-                cancelButtonText: 'Cancel',
-                type: 'warning'
-            }
-        )
-        toastAction(async () => {
-            await rpc.db.del(el.name)
-            list.value = await rpc.db.get()
-        }, 'delete the database')
-    } catch (e) {}
-}
-
-const displayTimestamp = el => {
-    return new Date(el).toLocaleString()
-}
 </script>

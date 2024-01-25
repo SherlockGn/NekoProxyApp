@@ -1,7 +1,7 @@
 <template>
     <div style="width: 80%">
-        <el-form :model="rule" label-width="180px">
-            <el-form-item label="Rule name">
+        <el-form :model="rule" label-width="180px" :rules="validates" ref="form">
+            <el-form-item label="Rule name" prop="name">
                 <el-input v-model="rule.name" />
             </el-form-item>
             <el-form-item label="Rule description">
@@ -155,6 +155,7 @@ const route = useRoute()
 const router = useRouter()
 
 const ruleId = ref(route.query.ruleId)
+const form = ref(null)
 
 onMounted(async () => {
     if (ruleId.value !== undefined) {
@@ -201,7 +202,22 @@ const rule = ref({
     'https': false
 })
 
+const validates = {
+    name: [
+        {
+            required: true,
+            message: 'Please input the rule name',
+            trigger: 'blur'
+        }
+    ]
+}
+
 const createOrUpdate = async () => {
+    try {
+        await form.value.validate()
+    } catch {
+        return
+    }
     const ruleToCreate = {
         ...rule.value,
         limit: `${rule.value.limit.val}${rule.value.limit.unit}`.toLowerCase(),

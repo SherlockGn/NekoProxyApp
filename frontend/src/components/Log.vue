@@ -41,9 +41,8 @@
                     </template>
                     <template v-if="getColType(scope, c) === 'json'">
                         <json-viewer
-                            :value="
-                                JSON.parse(scope.row[c.prop])
-                            "></json-viewer>
+                            :value="JSON.parse(scope.row[c.prop])"
+                            :expand-depth="0"></json-viewer>
                     </template>
                 </template>
             </el-table-column>

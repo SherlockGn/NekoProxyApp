@@ -5,7 +5,7 @@
                 <el-input v-model="user.name" :disabled="isOnline" />
             </el-form-item>
             <el-form-item label="Password">
-                <el-input v-model="user.password" type="password" />
+                <el-input v-model="user.password" show-password />
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="loginOrUpdate">
@@ -65,13 +65,3 @@ const logout = async () => {
     reload()
 }
 </script>
-
-<style scoped>
-.el-notification {
-    --el-notification-width: 1000px !important;
-}
-
-.el-icon {
-    margin-left: 5px;
-}
-</style>

@@ -20,7 +20,7 @@ const monitor = (req, res, next) => {
         const transaction = req.context.transaction
         const reqLength = req.headers['content-length'] ?? 0
         const resLength = res.getHeader('content-length') ?? 0
-        if (req.context.isApiPreflight) {
+        if (req.context.isApiPreflight || req.context.isRootPath) {
             return
         }
         if (req.context.rpc) {

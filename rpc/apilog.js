@@ -23,6 +23,12 @@ const get = async (timerange, keyword, offset, limit) => {
         },
         {
             func: { [Op.substring]: keyword }
+        },
+        {
+            user: { [Op.substring]: keyword }
+        },
+        {
+            authType: { [Op.substring]: keyword }
         }
     ]
     if (timerange !== null) {

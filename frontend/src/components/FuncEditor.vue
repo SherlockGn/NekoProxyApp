@@ -17,7 +17,6 @@
 import { Codemirror } from 'vue-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { oneDark } from '@codemirror/theme-one-dark'
-import { onMounted } from 'vue'
 
 const props = defineProps({
     modelValue: String,
@@ -34,10 +33,13 @@ const props = defineProps({
     paramList: Array
 })
 
-const value = ref('')
-
-onMounted(() => {
-    value.value = props.modelValue
+const value = computed({
+    get() {
+        return props.modelValue
+    },
+    set(val) {
+        emit('update:modelValue', val)
+    }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -49,17 +51,6 @@ const header = computed(() => {
 })
 
 const extensions = [javascript(), oneDark]
-
-watch(value, newValue => {
-    emit('update:modelValue', newValue)
-})
-
-watch(
-    () => props.modelValue,
-    newValue => {
-        value.value = newValue
-    }
-)
 </script>
 
 <style scoped>

@@ -12,6 +12,7 @@ router.get('/', function (req, res, next) {
         next()
         return
     }
+    req.context.isRootPath = true
     res.redirect('/nekoapp/public')
 })
 
