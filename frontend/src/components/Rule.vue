@@ -69,6 +69,10 @@ const config = ref({
         },
         {
             val: ' the list.'
+        },
+        {
+            val: ' Drag and drop the elements to rearrange their order.',
+            displayIfNotEmpty: true
         }
     ],
     header: el => ({ name: el.name, description: el.description }),

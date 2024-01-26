@@ -734,7 +734,12 @@ const clear = () => {
     logs.splice(0, logs.length)
 }
 
+const stat = () => {
+    throw new Error('Proxy log analysis is temporarily disabled in demo mode.')
+}
+
 export default {
     get,
-    clear
+    clear,
+    stat
 }

@@ -31,10 +31,11 @@ const projects = [
     }
 ]
 
-const add = project => {
+const add = async project => {
     project.id = projects.length + 1
     project.createdAt = new Date().toJSON()
     project.updatedAt = new Date().toJSON()
+    await new Promise(resolve => setTimeout(resolve, 3000))
     projects.push(project)
 }
 

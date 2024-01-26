@@ -22,10 +22,7 @@
                         </el-link>
                     </template>
                     <template
-                        v-else-if="
-                            !textItem.displayIfEmpty ||
-                            (textItem.displayIfEmpty && list.length === 0)
-                        ">
+                        v-else-if="showTextItem(textItem)">
                         <el-text
                             :key="index"
                             v-html="
@@ -168,12 +165,16 @@ const getAction = async (item, el) => {
         let name = null
         const {
             msg = 'Please input the name',
-            title = 'Create item'
+            title = 'Create item',
+            inputErrorMessage = 'Name cannot be empty',
+            inputPattern = /^.+$/
         } = getNameByDialog
         try {
             name = await ElMessageBox.prompt(msg, title, {
                 confirmButtonText: 'OK',
-                cancelButtonText: 'Cancel'
+                cancelButtonText: 'Cancel',
+                inputErrorMessage,
+                inputPattern
             })
         } catch {
             return
@@ -192,6 +193,16 @@ const getAction = async (item, el) => {
     if (item === 'get') {
         list.value = ret
     }
+}
+
+const showTextItem = textItem => {
+    if (textItem.displayIfEmpty) {
+        return list.value.length === 0
+    }
+    if (textItem.displayIfNotEmpty) {
+        return list.value.length > 0
+    }
+    return true
 }
 
 const getExtraText = el => {

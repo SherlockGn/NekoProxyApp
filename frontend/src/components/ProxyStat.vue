@@ -1,123 +1,153 @@
 <template>
     <div style="width: 100%">
-        <el-form label-width="150px">
-            <el-form-item label="Time range">
-                <date-picker v-model="timerange" />
-            </el-form-item>
-            <el-form-item>
-                <template #label>
-                    <el-text>
-                        Advanced filter
-                        <el-icon @click="showNotification(info.stat.filter)">
-                            <i-ep-info-filled />
-                        </el-icon>
-                    </el-text>
-                </template>
-                <func-editor
-                    v-model="filter"
-                    funcName="filter"
-                    :paramList="[]"
-                    placeholder="e.g. { method: 'GET' }"
-                    :show-header="false"></func-editor>
-            </el-form-item>
-            <el-form-item label="Chart type">
-                <el-select v-model="chartType" placeholder="Select">
-                    <el-option
-                        key="time"
-                        label="Line chart (time)"
-                        value="time" />
-                    <el-option key="line" label="Line chart" value="line" />
-                    <el-option key="pie" label="Pie chart" value="pie" />
-                    <el-option key="bar" label="Bar chart" value="bar" />
-                </el-select>
-                <el-select
-                    v-model="timeUnit"
-                    placeholder="Select"
-                    style="margin-left: 5px"
-                    v-show="chartType === 'time'">
-                    <el-option key="year" label="Year" value="year" />
-                    <el-option key="month" label="Month" value="month" />
-                    <el-option key="day" label="Day" value="day" />
-                    <el-option key="hour" label="Hour" value="hour" />
-                    <el-option key="minute" label="Minute" value="minute" />
-                    <el-option key="second" label="Second" value="second" />
-                </el-select>
-            </el-form-item>
-            <el-form-item label="Analysis target">
-                <el-select v-model="func" placeholder="Select">
-                    <el-option key="avg" label="Average" value="avg" />
-                    <el-option key="max" label="Max" value="max" />
-                    <el-option key="min" label="Min" value="min" />
-                    <el-option key="count" label="Count" value="count" />
-                </el-select>
-                <el-select
-                    v-model="col"
-                    placeholder="Select"
-                    style="margin-left: 5px"
-                    v-show="func !== 'count'">
-                    <!-- <el-option key="url" label="URL" value="url" /> -->
-                    <!-- <el-option key="method" label="Method" value="method" /> -->
-                    <!-- <el-option key="status" label="Status code" value="status" /> -->
-                    <!-- <el-option key="transaction" label="Transaction ID" value="transaction" /> -->
-                    <el-option
-                        key="reqLength"
-                        label="Request length"
-                        value="reqLength" />
-                    <el-option
-                        key="resLength"
-                        label="Response length"
-                        value="resLength" />
-                    <!-- <el-option key="ruleName" label="Rule name" value="ruleName" /> -->
-                    <el-option
-                        key="duration"
-                        label="Duration"
-                        value="duration" />
-                </el-select>
-            </el-form-item>
-            <el-form-item label="Group by">
-                <el-checkbox-group v-model="groupBy">
-                    <el-checkbox label="url">URL</el-checkbox>
-                    <el-checkbox label="method">Method</el-checkbox>
-                    <el-checkbox label="status">Status code</el-checkbox>
-                    <el-checkbox label="ruleName">Rule name</el-checkbox>
-                </el-checkbox-group>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="getStat">
-                    Get statistics
-                </el-button>
-            </el-form-item>
-        </el-form>
-
+        <edit-element :config="config" />
         <div
             ref="chartEl"
-            :style="{ height, border: '#409eff 1px dashed' }"></div>
+            :style="{
+                height,
+                border: '#409eff 1px dashed',
+                width: '80%'
+            }"></div>
     </div>
 </template>
 
 <script setup>
 import { rpc } from '../utils/rpc'
-import { toastAction } from '../utils/toastAction'
 import { info } from '../utils/info'
 
 import * as echarts from 'echarts'
 import JSON5 from 'json5'
-import { normalizeProps } from 'vue'
 
-const filter = ref('')
-const chartType = ref('time')
-const timeUnit = ref('hour')
-
-const func = ref('avg')
-const col = ref('duration')
-
-const groupBy = ref([])
+const config = ref({
+    stay: true,
+    customBtn: 'Get statistics',
+    hideCancel: true,
+    actions: {
+        getElById: rpc.project.getById,
+        click: {
+            func: async el => await stat(el),
+            description: 'analyze proxy stat'
+        },
+        beforeCreate: el => {
+            let where = {}
+            try {
+                where = JSON5.parse(el.filter)
+            } catch {}
+            return {
+                ...el,
+                filter: where,
+                col: el.func === 'count' ? '*' : el.col
+            }
+        }
+    },
+    default: {
+        timerange: null,
+        filter: '',
+        chartType: 'time',
+        timeUnit: 'hour',
+        func: 'avg',
+        col: 'duration',
+        groupBy: []
+    },
+    components: [
+        {
+            label: 'Time range',
+            items: [
+                {
+                    type: 'date-picker',
+                    prop: 'timerange'
+                }
+            ]
+        },
+        {
+            label: 'Advanced filter',
+            hint: info.stat.filter,
+            items: [
+                {
+                    type: 'func-editor',
+                    prop: 'filter',
+                    attrs: {
+                        paramList: [],
+                        showHeader: false,
+                        placeholder: "e.g. { method: 'GET' }"
+                    }
+                }
+            ]
+        },
+        {
+            label: 'Chart type',
+            items: [
+                {
+                    type: 'el-select',
+                    prop: 'chartType',
+                    options: [
+                        { label: 'Line chart (time)', val: 'time' },
+                        { label: 'Line chart', val: 'line' },
+                        { label: 'Pie chart', val: 'pie' },
+                        { label: 'Bar chart', val: 'bar' }
+                    ]
+                },
+                {
+                    type: 'el-select',
+                    prop: 'timeUnit',
+                    showIf: el => el.chartType === 'time',
+                    options: [
+                        { label: 'Year', val: 'year' },
+                        { label: 'Month', val: 'month' },
+                        { label: 'Day', val: 'day' },
+                        { label: 'Hour', val: 'hour' },
+                        { label: 'Minute', val: 'minute' },
+                        { label: 'Second', val: 'second' }
+                    ]
+                }
+            ]
+        },
+        {
+            label: 'Analysis target',
+            items: [
+                {
+                    type: 'el-select',
+                    prop: 'func',
+                    options: [
+                        { label: 'Average', val: 'avg' },
+                        { label: 'Max', val: 'max' },
+                        { label: 'Min', val: 'min' },
+                        { label: 'Count', val: 'count' }
+                    ]
+                },
+                {
+                    type: 'el-select',
+                    prop: 'col',
+                    showIf: el => el.func !== 'count',
+                    options: [
+                        { label: 'Request length', val: 'reqLength' },
+                        { label: 'Response length', val: 'resLength' },
+                        { label: 'Duration', val: 'duration' }
+                    ]
+                }
+            ]
+        },
+        {
+            label: 'Group by',
+            items: [
+                {
+                    type: 'el-checkbox-group',
+                    prop: 'groupBy',
+                    options: [
+                        { val: 'url', label: 'URL' },
+                        { val: 'method', label: 'Method' },
+                        { val: 'status', label: 'Status code' },
+                        { val: 'ruleName', label: 'Rule name' }
+                    ]
+                }
+            ]
+        }
+    ]
+})
 
 const height = computed(() => {
     return window.innerHeight - 570 + 'px'
 })
-
-const timerange = ref(null)
 
 const chartEl = ref(null)
 let chart = null
@@ -126,47 +156,29 @@ onMounted(async () => {
     chart = echarts.init(chartEl.value)
 })
 
-const showNotification = message => {
-    ElNotification({
-        title: 'Hint',
-        message,
-        type: 'info',
-        dangerouslyUseHTMLString: true,
-        duration: 0
-    })
-}
-
-const getStat = async e => {
-    await toastAction(stat, 'analyze proxy stat')
-}
-
-const stat = async () => {
-    let where = {}
-    try {
-        where = JSON5.parse(filter.value)
-    } catch {}
+const stat = async el => {
     const data = await rpc.proxylog.stat(
-        timerange.value,
-        where,
-        chartType.value === 'time',
-        timeUnit.value,
-        func.value,
-        func.value === 'count' ? '*' : col.value,
-        groupBy.value
+        el.timerange,
+        el.filter,
+        el.chartType === 'time',
+        el.timeUnit,
+        el.func,
+        el.col,
+        el.groupBy
     )
-    const names = data.map(i => groupBy.value.map(g => i[g]).join(' '))
+    const names = data.map(i => el.groupBy.map(g => i[g]).join(' '))
     let xAxis, yAxis, series, legend
-    let yAxisName = `${func.value}(${func.value === 'count' ? '*' : col.value})`
+    let yAxisName = `${el.func}(${el.col})`
     let showData
-    let type = chartType.value
+    let type = el.chartType
 
     yAxis = {
         type: 'value',
         name: yAxisName
     }
 
-    if (chartType.value !== 'time') {
-        if (chartType.value === 'pie') {
+    if (el.chartType !== 'time') {
+        if (el.chartType === 'pie') {
             showData = data.map((item, index) => {
                 return {
                     value: item.stat_target,
@@ -251,7 +263,7 @@ const stat = async () => {
         for (
             let i = minDateNumber;
             i <= maxDateNumber;
-            i = nextDate[timeUnit.value](new Date(i)).getTime()
+            i = nextDate[el.timeUnit](new Date(i)).getTime()
         ) {
             timeRange.push(new Date(i))
         }
@@ -262,7 +274,7 @@ const stat = async () => {
         type = 'line'
         series = names.map(name => {
             const d = data.filter(
-                i => groupBy.value.map(g => i[g]).join(' ') === name
+                i => el.groupBy.map(g => i[g]).join(' ') === name
             )
             return {
                 type,
@@ -293,13 +305,3 @@ const stat = async () => {
     })
 }
 </script>
-
-<style scoped>
-.el-notification {
-    --el-notification-width: 1000px !important;
-}
-
-.el-icon {
-    margin-left: 5px;
-}
-</style>

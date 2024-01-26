@@ -13,6 +13,7 @@ declare module 'vue' {
     DatePicker: typeof import('./components/DatePicker.vue')['default']
     Display: typeof import('./components/Display.vue')['default']
     DisplayItem: typeof import('./components/DisplayItem.vue')['default']
+    EditElement: typeof import('./components/EditElement.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
     ElCheckboxGroup: typeof import('element-plus/es')['ElCheckboxGroup']

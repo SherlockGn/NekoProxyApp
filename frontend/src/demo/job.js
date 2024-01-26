@@ -33,7 +33,9 @@ const add = job => {
 
 const get = () => {
     const ret = [...jobs]
-    ret.forEach(item => (item.status = ret.enabled ? 'online' : 'stopped'))
+    ret.forEach(item => {
+        item.status = item.enabled ? 'online' : 'stopped'
+    })
     return ret
 }
 
