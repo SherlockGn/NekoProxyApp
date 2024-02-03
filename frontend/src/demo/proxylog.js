@@ -1,3 +1,5 @@
+import { objToFilter } from '../utils/filter'
+
 const now = new Date().toJSON()
 
 const logs = [
@@ -703,6 +705,15 @@ const logs = [
     }
 ]
 
+logs.forEach((l, index) => {
+    l.createdAt = new Date(
+        new Date(l.createdAt).getTime() - 1000 * index
+    ).toJSON()
+    l.updatedAt = new Date(
+        new Date(l.updatedAt).getTime() - 1000 * index
+    ).toJSON()
+})
+
 const get = (timerange, keyword, offset, limit) => {
     let lg = [...logs]
     if (timerange) {
@@ -734,8 +745,119 @@ const clear = () => {
     logs.splice(0, logs.length)
 }
 
-const stat = () => {
-    throw new Error('Proxy log analysis is temporarily disabled in demo mode.')
+const formatDate = (date, format) => {
+    const year = date.getUTCFullYear().toString().padStart(2, '0')
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0')
+    const day = date.getUTCDate().toString().padStart(2, '0')
+    const hours = date.getUTCHours().toString().padStart(2, '0')
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0')
+    const seconds = date.getUTCSeconds().toString().padStart(2, '0')
+
+    return format
+        .replace('%Y', year)
+        .replace('%m', month)
+        .replace('%d', day)
+        .replace('%H', hours)
+        .replace('%M', minutes)
+        .replace('%S', seconds)
+}
+
+const stat = (
+    timerange,
+    customWhere,
+    isTimeChart,
+    timechartLevel,
+    func,
+    col,
+    groupBy
+) => {
+    let lg = [...logs]
+    if (timerange) {
+        lg = lg.filter(
+            item =>
+                new Date(item.createdAt) >= new Date(timerange[0]) &&
+                new Date(item.createdAt) <= new Date(timerange[1])
+        )
+    }
+    if (customWhere) {
+        lg = lg.filter(objToFilter(customWhere))
+    }
+
+    const attributes = [...groupBy]
+
+    if (isTimeChart) {
+        let formatter = ''
+        if (timechartLevel === 'year') {
+            formatter = '%Y-01-01T00:00:00.000Z'
+        }
+        if (timechartLevel === 'month') {
+            formatter = '%Y-%m-01T00:00:00.000Z'
+        }
+        if (timechartLevel === 'day') {
+            formatter = '%Y-%m-%dT00:00:00.000Z'
+        }
+        if (timechartLevel === 'hour') {
+            formatter = '%Y-%m-%dT%H:00:00.000Z'
+        }
+        if (timechartLevel === 'minute') {
+            formatter = '%Y-%m-%dT%H:%M:00.000Z'
+        }
+        if (timechartLevel === 'second') {
+            formatter = '%Y-%m-%dT%H:%M:%S.000Z'
+        }
+        lg.forEach(l => {
+            l['date_format'] = formatDate(new Date(l.createdAt), formatter)
+        })
+        attributes.push('date_format')
+    }
+
+    const group = [...groupBy]
+
+    if (isTimeChart) {
+        group.push('date_format')
+    }
+
+    const groups = []
+    const groupedLogs = []
+
+    lg.forEach(l => {
+        let i = groups.findIndex(g => {
+            for (const property of group) {
+                if (g[property] !== l[property]) {
+                    return false
+                }
+            }
+            return true
+        })
+        if (i < 0) {
+            const g = {}
+            group.forEach(p => {
+                g[p] = l[p]
+            })
+            groups.push(g)
+            i = groups.length - 1
+        }
+        if (groupedLogs[i] === undefined) {
+            groupedLogs[i] = []
+        }
+        groupedLogs[i].push(l)
+    })
+
+    groups.forEach((g, i) => {
+        const list = groupedLogs[i]
+        if (func === 'count') {
+            g['stat_target'] = list.length
+        } else if (func === 'max') {
+            g['stat_target'] = Math.max(...list.map(l => l[col]))
+        } else if (func === 'min') {
+            g['stat_target'] = Math.min(...list.map(l => l[col]))
+        } else if (func === 'avg') {
+            g['stat_target'] =
+                list.reduce((a, l) => a + l[col], 0) / list.length
+        }
+    })
+
+    return groups
 }
 
 export default {
