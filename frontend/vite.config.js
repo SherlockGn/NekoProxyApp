@@ -9,7 +9,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Inspect from 'vite-plugin-inspect'
 
 const pathSrc = path.resolve(__dirname, 'src')
-const demoMode = false
+const demoMode = true
 const base = !demoMode ? '/nekoapp/public' : '/neko-proxy-app'
 
 export default defineConfig({
