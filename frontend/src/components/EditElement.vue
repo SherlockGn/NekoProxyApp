@@ -67,11 +67,25 @@
                         v-bind="item.attrs"
                         :disabled="!item.disabledIfUpdate ? false : !isCreate"
                         v-show="item.showIf ? item.showIf(element) : true">
-                        <el-option
-                            v-for="option in item.options"
-                            :key="option.key ?? option"
-                            :label="option.label ?? option"
-                            :value="option.val ?? option" />
+                        <template v-if="!isOptionGrouped(item.options)">
+                            <el-option
+                                v-for="option in item.options"
+                                :key="option.key ?? option"
+                                :label="option.label ?? option"
+                                :value="option.val ?? option" />
+                        </template>
+                        <template v-else>
+                            <el-option-group
+                                v-for="group in item.options"
+                                :key="group.label"
+                                :label="group.label">
+                                <el-option
+                                    v-for="option in group.options"
+                                    :key="option.key ?? option"
+                                    :label="option.label ?? option"
+                                    :value="option.val ?? option" />
+                            </el-option-group>
+                        </template>
                     </el-select>
                     <func-editor
                         v-if="item.type === 'func-editor'"
@@ -219,6 +233,13 @@ const setSelementProperty = (el, prop, value) => {
             e = e[part]
         })
     e[prop.substring(prop.lastIndexOf('.') + 1)] = value
+}
+
+const isOptionGrouped = options => {
+    if (options.length === 0) {
+        return false
+    }
+    return options.every(o => o.hasOwnProperty('options'))
 }
 
 const showNotification = message => {

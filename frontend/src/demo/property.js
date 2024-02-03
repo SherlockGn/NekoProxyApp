@@ -36,7 +36,139 @@ const properties = [
         'createdAt': now,
         'updatedAt': now,
         'modelId': 2
-    }
+    },
+    {
+        'id': 4,
+        'name': 'IntegerTest',
+        'type': 'INTEGER',
+        'defaultValue': null,
+        'allowNull': false,
+        'unique': false,
+        'validate': null,
+        'createdAt': now,
+        'updatedAt': now,
+        'modelId': 3
+    },
+    {
+        'id': 5,
+        'name': 'BigIntTest',
+        'type': 'BIGINT',
+        'defaultValue': null,
+        'allowNull': false,
+        'unique': false,
+        'validate': null,
+        'createdAt': now,
+        'updatedAt': now,
+        'modelId': 3
+    },
+    {
+        'id': 6,
+        'name': 'FloatTest',
+        'type': 'FLOAT',
+        'defaultValue': null,
+        'allowNull': false,
+        'unique': false,
+        'validate': null,
+        'createdAt': now,
+        'updatedAt': now,
+        'modelId': 3
+    },
+    {
+        'id': 7,
+        'name': 'DoubleTest',
+        'type': 'DOUBLE',
+        'defaultValue': null,
+        'allowNull': false,
+        'unique': false,
+        'validate': null,
+        'createdAt': now,
+        'updatedAt': now,
+        'modelId': 3
+    },
+    {
+        'id': 8,
+        'name': 'DecimalTest',
+        'type': 'DECIMAL',
+        'defaultValue': null,
+        'allowNull': false,
+        'unique': false,
+        'validate': null,
+        'createdAt': now,
+        'updatedAt': now,
+        'modelId': 3
+    },
+    {
+        'id': 9,
+        'name': 'TextTest',
+        'type': 'TEXT',
+        'defaultValue': null,
+        'allowNull': false,
+        'unique': false,
+        'validate': null,
+        'createdAt': now,
+        'updatedAt': now,
+        'modelId': 3
+    },
+    {
+        'id': 10,
+        'name': 'StringTest',
+        'type': 'STRING',
+        'defaultValue': null,
+        'allowNull': false,
+        'unique': false,
+        'validate': null,
+        'createdAt': now,
+        'updatedAt': now,
+        'modelId': 3
+    },
+    {
+        'id': 11,
+        'name': 'BooleanTest',
+        'type': 'BOOLEAN',
+        'defaultValue': null,
+        'allowNull': false,
+        'unique': false,
+        'validate': null,
+        'createdAt': now,
+        'updatedAt': now,
+        'modelId': 3
+    },
+    {
+        'id': 12,
+        'name': 'DateTest',
+        'type': 'DATE',
+        'defaultValue': null,
+        'allowNull': false,
+        'unique': false,
+        'validate': null,
+        'createdAt': now,
+        'updatedAt': now,
+        'modelId': 3
+    },
+    {
+        'id': 13,
+        'name': 'DateOnlyTest',
+        'type': 'DATEONLY',
+        'defaultValue': null,
+        'allowNull': false,
+        'unique': false,
+        'validate': null,
+        'createdAt': now,
+        'updatedAt': now,
+        'modelId': 3
+    },
+    {
+        'id': 14,
+        'name': 'UUIDTest',
+        'type': 'UUID',
+        'defaultValue': null,
+        'allowNull': false,
+        'unique': false,
+        'validate': null,
+        'createdAt': now,
+        'updatedAt': now,
+        'modelId': 3
+    },
 ]
 
 const add = (property, modelId) => {

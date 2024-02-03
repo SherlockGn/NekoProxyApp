@@ -11,6 +11,7 @@ export const toastAction = async (action, hint) => {
         })
         return ret
     } catch (ex) {
+        console.error(ex)
         const message =
             !hint || hint.length === 0
                 ? 'The operation failed.'

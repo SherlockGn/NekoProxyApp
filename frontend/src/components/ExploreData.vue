@@ -82,9 +82,12 @@
                 v-model="editorData"
                 :showHeader="false"
                 :params="[]"
-                :height="1000"></func-editor>
+                :height="600"></func-editor>
             <template #footer>
                 <span class="dialog-footer">
+                    <el-button v-if="isCreate" @click="showFakerDialog = true">
+                        Generate fake data
+                    </el-button>
                     <el-button @click="dialogVisible = false">Cancel</el-button>
                     <el-button type="primary" @click="createOrUpdate">
                         {{ isCreate ? 'Create' : 'Update' }}
@@ -92,6 +95,18 @@
                 </span>
             </template>
         </el-dialog>
+
+        <faker
+            v-if="properties.length > 0"
+            v-model="showFakerDialog"
+            :properties="properties"
+            @update="
+                e => {
+                    editorData = JSON.stringify(e, null, 2)
+                    showFakerDialog = false
+                }
+            "
+            @cancel="showFakerDialog = false"></faker>
     </div>
 </template>
 
@@ -119,12 +134,14 @@ const editorData = ref('123')
 
 const isCreate = ref(false)
 
+const showFakerDialog = ref(false)
+
 onMounted(async () => {
     model.value = await rpc.model.getById(route.query.modelId)
     properties.value = await rpc.property.get(route.query.modelId)
     properties.value.splice(0, 0, { id: -1, name: 'id', type: 'INTEGER' })
-    properties.value.push({ id: 100000, name: 'createdAt', type: 'DATE' })
-    properties.value.push({ id: 100001, name: 'updatedAt', type: 'DATE' })
+    properties.value.push({ id: -2, name: 'createdAt', type: 'DATE' })
+    properties.value.push({ id: -3, name: 'updatedAt', type: 'DATE' })
     refresh()
 })
 
