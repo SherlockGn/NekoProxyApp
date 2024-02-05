@@ -1,5 +1,28 @@
 <template>
-    <Display :config="config" />
+    <div>
+        <Display :config="config" />
+        <el-drawer
+            size="70%"
+            v-model="showDrawer"
+            title="Project logs"
+            direction="rtl">
+            <el-form>
+                <el-form-item label="Last line">
+                    <el-input-number v-model="line" />
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="getLog">Get logs</el-button>
+                </el-form-item>
+                <el-form-item>
+                    <el-input
+                        style="font-family: Consolas, monospace"
+                        type="textarea"
+                        :autosize="{ minRows: 10, maxRows: 30 }"
+                        v-model="logContent" />
+                </el-form-item>
+            </el-form>
+        </el-drawer>
+    </div>
 </template>
 
 <script setup>
@@ -26,6 +49,9 @@ const config = ref({
             func: async el => await rpc.pm.restart(el.pm_id),
             description: 'restart process',
             refreshRequired: true
+        },
+        viewLog: {
+            func: el => log(el)
         }
     },
     titles: [
@@ -66,7 +92,15 @@ const config = ref({
             action: 'del'
         },
         {
-            val: ' this process.'
+            val: ' this process. View the '
+        },
+        {
+            val: 'logs',
+            type: 'primary',
+            action: 'viewLog'
+        },
+        {
+            val: '.'
         }
     ],
     props: [
@@ -116,4 +150,20 @@ const config = ref({
         }
     ]
 })
+
+let currentId = null
+const showDrawer = ref(false)
+const line = ref(100)
+const logContent = ref('')
+
+const log = async el => {
+    showDrawer.value = true
+    line.value = 100
+    currentId = el.pm_id
+    logContent.value = ''
+}
+
+const getLog = async () => {
+    logContent.value = await rpc.pm.getLog(currentId, line.value)
+}
 </script>
